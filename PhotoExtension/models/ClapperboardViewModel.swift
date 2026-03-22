@@ -227,15 +227,6 @@ class ClapperboardViewModel {
         overlayLayer.opacity = 1.0
         parentLayer.addSublayer(overlayLayer)
 
-        let fadeAnimation = CABasicAnimation(keyPath: "opacity")
-        fadeAnimation.duration = 0.5
-        fadeAnimation.beginTime = AVCoreAnimationBeginTimeAtZero + 2.0
-        fadeAnimation.fromValue = 1.0
-        fadeAnimation.toValue = 0.0
-        fadeAnimation.isRemovedOnCompletion = false
-        fadeAnimation.fillMode = .forwards
-        overlayLayer.add(fadeAnimation, forKey: "fade")
-
         videoComposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
 
         guard let exportSession = AVAssetExportSession(
