@@ -244,8 +244,6 @@ class ClapperboardViewModel {
             presetName: AVAssetExportPresetHighestQuality
         ) else { throw VideoProcessingError.exportSessionFailed }
 
-        exportSession.outputURL = outputURL
-        exportSession.outputFileType = .mov
         exportSession.shouldOptimizeForNetworkUse = true
         exportSession.videoComposition = videoComposition
 
@@ -258,16 +256,11 @@ class ClapperboardViewModel {
             }
         }
 
-        try await withCheckedThrowingContinuation { continuation in
-            exportSession.exportAsynchronously {
-                if exportSession.status == .completed {
-                    continuation.resume()
-                } else {
-                    let error = exportSession.error ?? VideoProcessingError.exportSessionFailed
-                    SentrySDK.capture(error: error)
-                    continuation.resume(throwing: error)
-                }
-            }
+        do {
+            try await exportSession.export(to: outputURL, as: .mov)
+        } catch {
+            SentrySDK.capture(error: error)
+            throw error
         }
     }
 
