@@ -73,10 +73,10 @@ class ClapperboardViewModel {
         
         if let fullSizeURL = input.fullSizeImageURL {
             videoURL = fullSizeURL
-            print("🎬 Using fullSizeImageURL: \(fullSizeURL)")
+            print("Using fullSizeImageURL: \(fullSizeURL)")
         } else if let asset = input.audiovisualAsset as? AVURLAsset {
             videoURL = asset.url
-            print("🎬 Using audiovisualAsset URL: \(asset.url)")
+            print("Using audiovisualAsset URL: \(asset.url)")
         }
         
         guard let videoURL = videoURL else {
@@ -224,7 +224,17 @@ class ClapperboardViewModel {
         let overlayLayer = CALayer()
         overlayLayer.contents = clapperImage
         overlayLayer.frame = CGRect(origin: .zero, size: videoSize)
+
         overlayLayer.opacity = 1.0
+        let hideAnimation = CAKeyframeAnimation(keyPath: "opacity")
+        hideAnimation.values = [1.0, 1.0, 0.0]
+        hideAnimation.keyTimes = [0.0, NSNumber(value: 1.0 / 30.0 / duration.seconds), NSNumber(value: 1.0 / 30.0 / duration.seconds)]
+        hideAnimation.duration = duration.seconds
+        hideAnimation.beginTime = AVCoreAnimationBeginTimeAtZero
+        hideAnimation.isRemovedOnCompletion = false
+        hideAnimation.fillMode = .forwards
+        overlayLayer.add(hideAnimation, forKey: "thumbnailOnly")
+
         parentLayer.addSublayer(overlayLayer)
 
         videoComposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
@@ -266,86 +276,83 @@ class ClapperboardViewModel {
             let renderer = UIGraphicsImageRenderer(size: size)
             let image = renderer.image { context in
                 let cgContext = context.cgContext
-                
-                cgContext.setFillColor(UIColor.white.cgColor)
-                cgContext.fill(CGRect(origin: .zero, size: size))
-                
-                let scale = min(size.width / 1920, size.height / 1080)
-                let clapperHeight = 200 * scale
-                let stripeHeight = 60 * scale
-                let fontSize = 36 * scale
-                let smallFontSize = 24 * scale
-                
-                let stripesRect = CGRect(x: 0, y: 0, width: size.width, height: stripeHeight)
-                let stripeWidth = size.width / 8
-                
-                for i in 0..<8 {
-                    let color = i % 2 == 0 ? UIColor.black : UIColor.white
+
+                let scale = min(size.width, size.height) / 1080.0
+
+                let stripeHeight = 80.0 * scale
+                let infoHeight = 220.0 * scale
+                let overlayHeight = stripeHeight + infoHeight
+
+                cgContext.setFillColor(UIColor.black.withAlphaComponent(0.75).cgColor)
+                cgContext.fill(CGRect(x: 0, y: 0, width: size.width, height: overlayHeight))
+
+                let stripeWidth = size.width / 10
+                for i in 0..<10 {
+                    let color = i % 2 == 0 ? UIColor.white : UIColor.black
                     cgContext.setFillColor(color.cgColor)
-                    let rect = CGRect(
+                    cgContext.fill(CGRect(
                         x: CGFloat(i) * stripeWidth,
                         y: 0,
                         width: stripeWidth,
                         height: stripeHeight
-                    )
-                    cgContext.fill(rect)
+                    ))
                 }
-                
-                cgContext.setStrokeColor(UIColor.black.cgColor)
-                cgContext.setLineWidth(4)
-                cgContext.stroke(stripesRect)
-                
-                let infoRect = CGRect(
-                    x: 0,
-                    y: stripeHeight,
-                    width: size.width,
-                    height: clapperHeight - stripeHeight
-                )
-                
-                cgContext.setFillColor(UIColor.white.cgColor)
-                cgContext.fill(infoRect)
-                cgContext.stroke(infoRect)
-                
-                let titleText = "TITLE: \(title.uppercased())"
-                let sceneText = "SCENE: \(scene)"
-                let takeText = "TAKE: \(take)"
-                let directorText = "DIRECTOR: \(director.uppercased())"
-                let dateText = "DATE: \(date)"
-                
-                let textAttributes: [NSAttributedString.Key: Any] = [
-                    .font: UIFont.boldSystemFont(ofSize: fontSize),
-                    .foregroundColor: UIColor.black
+
+                cgContext.setStrokeColor(UIColor.white.withAlphaComponent(0.4).cgColor)
+                cgContext.setLineWidth(2 * scale)
+                cgContext.move(to: CGPoint(x: 0, y: stripeHeight))
+                cgContext.addLine(to: CGPoint(x: size.width, y: stripeHeight))
+                cgContext.strokePath()
+
+                let titleFontSize = 72.0 * scale
+                let bodyFontSize = 52.0 * scale
+                let padding = 32.0 * scale
+                let lineSpacing = 12.0 * scale
+
+                let titleAttributes: [NSAttributedString.Key: Any] = [
+                    .font: UIFont.boldSystemFont(ofSize: titleFontSize),
+                    .foregroundColor: UIColor.white
                 ]
-                
-                let smallTextAttributes: [NSAttributedString.Key: Any] = [
-                    .font: UIFont.systemFont(ofSize: smallFontSize),
-                    .foregroundColor: UIColor.black
+
+                let bodyAttributes: [NSAttributedString.Key: Any] = [
+                    .font: UIFont.systemFont(ofSize: bodyFontSize, weight: .medium),
+                    .foregroundColor: UIColor.white
                 ]
-                
-                let padding: CGFloat = 20 * scale
+
+                let labelAttributes: [NSAttributedString.Key: Any] = [
+                    .font: UIFont.systemFont(ofSize: bodyFontSize * 0.7, weight: .regular),
+                    .foregroundColor: UIColor.white.withAlphaComponent(0.6)
+                ]
+
                 var yPos = stripeHeight + padding
-                
-                titleText.draw(at: CGPoint(x: padding, y: yPos), withAttributes: textAttributes)
-                
-                yPos += fontSize + 10
-                sceneText.draw(at: CGPoint(x: padding, y: yPos), withAttributes: smallTextAttributes)
-                
-                yPos += smallFontSize + 5
-                takeText.draw(at: CGPoint(x: padding, y: yPos), withAttributes: smallTextAttributes)
-                
-                yPos = stripeHeight + padding + fontSize + 10
-                let rightX = size.width - padding - 300 * scale
-                
-                directorText.draw(at: CGPoint(x: rightX, y: yPos), withAttributes: smallTextAttributes)
-                
-                yPos += smallFontSize + 5
-                dateText.draw(at: CGPoint(x: rightX, y: yPos), withAttributes: smallTextAttributes)
+
+                "TITLE".draw(at: CGPoint(x: padding, y: yPos), withAttributes: labelAttributes)
+                yPos += bodyFontSize * 0.7 + 4
+                title.uppercased().draw(at: CGPoint(x: padding, y: yPos), withAttributes: titleAttributes)
+                yPos += titleFontSize + lineSpacing
+
+                let sceneStr = "SCENE  \(scene)"
+                sceneStr.draw(at: CGPoint(x: padding, y: yPos), withAttributes: bodyAttributes)
+
+                let rightX = size.width / 2 + padding
+                var rightY = stripeHeight + padding
+
+                "DIRECTOR".draw(at: CGPoint(x: rightX, y: rightY), withAttributes: labelAttributes)
+                rightY += bodyFontSize * 0.7 + 4
+                director.uppercased().draw(at: CGPoint(x: rightX, y: rightY), withAttributes: titleAttributes)
+                rightY += titleFontSize + lineSpacing
+
+                let takeStr = "TAKE  \(take)"
+                takeStr.draw(at: CGPoint(x: rightX, y: rightY), withAttributes: bodyAttributes)
+                rightY += bodyFontSize + lineSpacing
+
+                let dateStr = "DATE  \(date)"
+                dateStr.draw(at: CGPoint(x: rightX, y: rightY), withAttributes: bodyAttributes)
             }
-            
+
             guard let cgImage = image.cgImage else {
                 let error = VideoProcessingError.clapperboardRenderFailed
                 SentrySDK.capture(error: error)
-                // Return a 1x1 transparent fallback to avoid a force-unwrap crash
                 let fallback = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1))
                     .image { _ in }
                 continuation.resume(returning: fallback.cgImage!)
