@@ -47,7 +47,7 @@ struct HomeView: View {
                 }
                 
                 Section {
-                    Text("Select photos in your library, then open Clapperboard to perform quick actions.")
+                    Text("Select videos in your library, then open Clapperboard to perform quick actions.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .padding(.vertical, 4)
