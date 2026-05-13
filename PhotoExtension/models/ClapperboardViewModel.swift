@@ -263,84 +263,140 @@ class ClapperboardViewModel {
             throw error
         }
     }
-
+    
     private func createClapperboardImage(size: CGSize) async -> CGImage {
         await withCheckedContinuation { continuation in
             let renderer = UIGraphicsImageRenderer(size: size)
             let image = renderer.image { context in
                 let cgContext = context.cgContext
 
-                let scale = min(size.width, size.height) / 1080.0
+                let isLandscape = size.width > size.height
+
+                // Scale based on the dimension that matters for readability
+                let scale = (isLandscape ? size.height : size.width) / 1080.0
 
                 let stripeHeight = 80.0 * scale
-                let infoHeight = 220.0 * scale
+                // In landscape the overlay shouldn't take up too much vertical space
+                let infoHeight = isLandscape ? size.height * 0.45 : 400.0 * scale
                 let overlayHeight = stripeHeight + infoHeight
+                let verticalOffset = (size.height - overlayHeight) / 2
+                let sideInset = size.width * 0.05
+                let overlayWidth = size.width - sideInset * 2
 
-                cgContext.setFillColor(UIColor.black.withAlphaComponent(0.75).cgColor)
-                cgContext.fill(CGRect(x: 0, y: 0, width: size.width, height: overlayHeight))
+                // Background
+                cgContext.setFillColor(UIColor.black.withAlphaComponent(0.45).cgColor)
+                cgContext.fill(CGRect(x: sideInset, y: verticalOffset, width: overlayWidth, height: overlayHeight))
 
-                let stripeWidth = size.width / 10
+                // Gradient
+                let gradientColors = [
+                    UIColor.white.withAlphaComponent(0.08).cgColor,
+                    UIColor.white.withAlphaComponent(0.02).cgColor
+                ] as CFArray
+                let gradient = CGGradient(
+                    colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                    colors: gradientColors,
+                    locations: [0.0, 1.0]
+                )!
+                cgContext.saveGState()
+                cgContext.clip(to: CGRect(x: sideInset, y: verticalOffset, width: overlayWidth, height: overlayHeight))
+                cgContext.drawLinearGradient(
+                    gradient,
+                    start: CGPoint(x: 0, y: verticalOffset),
+                    end: CGPoint(x: 0, y: verticalOffset + overlayHeight),
+                    options: []
+                )
+                cgContext.restoreGState()
+
+                // Stripes
+                let stripeWidth = overlayWidth / 10
                 for i in 0..<10 {
                     let color = i % 2 == 0 ? UIColor.white : UIColor.black
                     cgContext.setFillColor(color.cgColor)
                     cgContext.fill(CGRect(
-                        x: CGFloat(i) * stripeWidth,
-                        y: 0,
+                        x: sideInset + CGFloat(i) * stripeWidth,
+                        y: verticalOffset,
                         width: stripeWidth,
                         height: stripeHeight
                     ))
                 }
 
-                cgContext.setStrokeColor(UIColor.white.withAlphaComponent(0.4).cgColor)
-                cgContext.setLineWidth(2 * scale)
-                cgContext.move(to: CGPoint(x: 0, y: stripeHeight))
-                cgContext.addLine(to: CGPoint(x: size.width, y: stripeHeight))
+                // Separator line below stripes
+                cgContext.setStrokeColor(UIColor.white.withAlphaComponent(0.25).cgColor)
+                cgContext.setLineWidth(1.5 * scale)
+                cgContext.move(to: CGPoint(x: sideInset, y: verticalOffset + stripeHeight))
+                cgContext.addLine(to: CGPoint(x: sideInset + overlayWidth, y: verticalOffset + stripeHeight))
                 cgContext.strokePath()
 
-                let titleFontSize = 72.0 * scale
-                let bodyFontSize = 52.0 * scale
-                let padding = 32.0 * scale
-                let lineSpacing = 12.0 * scale
+                // Scale fonts down in landscape so they fit comfortably
+                let titleFontSize = (isLandscape ? 60.0 : 90.0) * scale
+                let bodyFontSize = (isLandscape ? 40.0 : 58.0) * scale
+                let labelFontSize = bodyFontSize * 0.65
+                let padding = (isLandscape ? 18.0 : 28.0) * scale
+                let lineSpacing = (isLandscape ? 6.0 : 10.0) * scale
 
                 let titleAttributes: [NSAttributedString.Key: Any] = [
                     .font: UIFont.boldSystemFont(ofSize: titleFontSize),
-                    .foregroundColor: UIColor.white
+                    .foregroundColor: UIColor.white.withAlphaComponent(0.85)
                 ]
 
                 let bodyAttributes: [NSAttributedString.Key: Any] = [
                     .font: UIFont.systemFont(ofSize: bodyFontSize, weight: .medium),
-                    .foregroundColor: UIColor.white
+                    .foregroundColor: UIColor.white.withAlphaComponent(0.75)
                 ]
 
                 let labelAttributes: [NSAttributedString.Key: Any] = [
-                    .font: UIFont.systemFont(ofSize: bodyFontSize * 0.7, weight: .regular),
-                    .foregroundColor: UIColor.white.withAlphaComponent(0.6)
+                    .font: UIFont.systemFont(ofSize: labelFontSize, weight: .regular),
+                    .foregroundColor: UIColor.white.withAlphaComponent(0.45)
                 ]
 
-                var yPos = stripeHeight + padding
+                let centerX = size.width / 2
 
-                "TITLE".draw(at: CGPoint(x: padding, y: yPos), withAttributes: labelAttributes)
-                yPos += bodyFontSize * 0.7 + 4
-                title.uppercased().draw(at: CGPoint(x: padding, y: yPos), withAttributes: titleAttributes)
-                yPos += titleFontSize + lineSpacing
+                func drawCentred(_ string: String, attributes: [NSAttributedString.Key: Any], y: CGFloat) {
+                    let nsString = string as NSString
+                    let textSize = nsString.size(withAttributes: attributes)
+                    let x = centerX - textSize.width / 2
+                    nsString.draw(at: CGPoint(x: x, y: y), withAttributes: attributes)
+                }
 
-                let sceneStr = "SCENE  \(scene)"
-                sceneStr.draw(at: CGPoint(x: padding, y: yPos), withAttributes: bodyAttributes)
+                var yPos = verticalOffset + stripeHeight + padding
 
-                let rightX = size.width / 2 + padding
-                var rightY = stripeHeight + padding
+                drawCentred("TITLE", attributes: labelAttributes, y: yPos)
+                yPos += labelFontSize + 6 * scale
 
-                "DIRECTOR".draw(at: CGPoint(x: rightX, y: rightY), withAttributes: labelAttributes)
-                rightY += bodyFontSize * 0.7 + 4
-                director.uppercased().draw(at: CGPoint(x: rightX, y: rightY), withAttributes: titleAttributes)
-                rightY += titleFontSize + lineSpacing
+                drawCentred(title.uppercased(), attributes: titleAttributes, y: yPos)
+                yPos += titleFontSize + lineSpacing * 2
 
-                let takeStr = "TAKE  \(take)"
-                takeStr.draw(at: CGPoint(x: rightX, y: rightY), withAttributes: bodyAttributes)
-                rightY += bodyFontSize + lineSpacing
+                // Divider
+                cgContext.setStrokeColor(UIColor.white.withAlphaComponent(0.15).cgColor)
+                cgContext.setLineWidth(1.0 * scale)
+                let dividerInset = size.width * 0.1
+                cgContext.move(to: CGPoint(x: dividerInset, y: yPos))
+                cgContext.addLine(to: CGPoint(x: size.width - dividerInset, y: yPos))
+                cgContext.strokePath()
+                yPos += lineSpacing * 1.5
 
-                let dateStr = "DATE  \(date)"
-                dateStr.draw(at: CGPoint(x: rightX, y: rightY), withAttributes: bodyAttributes)
+                // Metadata row
+                let metaItems: [(label: String, value: String)] = [
+                    ("DIRECTOR", director.uppercased()),
+                    ("SCENE", scene),
+                    ("TAKE", take),
+                    ("DATE", date)
+                ]
+
+                let columnWidth = overlayWidth / CGFloat(metaItems.count)
+                for (index, item) in metaItems.enumerated() {
+                    let colCenterX = sideInset + columnWidth * CGFloat(index) + columnWidth / 2
+
+                    func drawColCentred(_ string: String, attributes: [NSAttributedString.Key: Any], y: CGFloat) {
+                        let nsString = string as NSString
+                        let textSize = nsString.size(withAttributes: attributes)
+                        let x = colCenterX - textSize.width / 2
+                        nsString.draw(at: CGPoint(x: x, y: y), withAttributes: attributes)
+                    }
+
+                    drawColCentred(item.label, attributes: labelAttributes, y: yPos)
+                    drawColCentred(item.value, attributes: bodyAttributes, y: yPos + labelFontSize + 4 * scale)
+                }
             }
 
             guard let cgImage = image.cgImage else {
@@ -355,3 +411,4 @@ class ClapperboardViewModel {
         }
     }
 }
+
