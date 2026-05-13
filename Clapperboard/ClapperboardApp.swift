@@ -34,7 +34,7 @@ struct ClapperboardApp: App {
             // options.attachViewHierarchy = true // This adds the view hierarchy to the error events
             
             // Enable experimental logging features
-            options.experimental.enableLogs = true
+//            options.experimental.enableLogs = true
         }
     }
     var body: some Scene {
