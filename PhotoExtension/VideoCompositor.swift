@@ -10,85 +10,92 @@ import AVFoundation
 import CoreImage
 import Sentry
 
+
 /// Handles all AVFoundation work: building the composition, attaching the
 /// clapperboard overlay via Core Animation, and exporting the final file.
 /// Has no dependency on Photos or UIKit (the overlay image is injected).
 struct VideoCompositor {
-
+ 
     // MARK: - Public entry point
-
+ 
     func process(inputURL: URL, outputURL: URL, overlayImage: CGImage) async throws {
         let asset = AVURLAsset(url: inputURL)
-
-        let (composition, videoCompositionTrack) = try await buildComposition(from: asset)
-        let videoSize = try await loadVideoSize(from: asset)
-        let duration  = try await asset.load(.duration)
+ 
+        // Load the source track once; share it across helpers to avoid redundant I/O.
+        guard let sourceTrack = try await asset.loadTracks(withMediaType: .video).first else {
+            throw VideoProcessingError.noVideoTrack
+        }
+ 
+        let (composition, compositionTrack) = try await buildComposition(from: asset, sourceTrack: sourceTrack)
+        let transform  = try await sourceTrack.load(.preferredTransform)
+        let naturalSize = try await sourceTrack.load(.naturalSize)
+        let videoSize  = transformedSize(naturalSize: naturalSize, transform: transform)
+        let duration   = try await asset.load(.duration)
+ 
         let videoComposition = buildVideoComposition(
             size: videoSize,
             duration: duration,
-            compositionTrack: videoCompositionTrack,
+            compositionTrack: compositionTrack,
+            preferredTransform: transform,
             overlayImage: overlayImage
         )
-
+ 
         try await export(composition: composition, videoComposition: videoComposition, to: outputURL)
     }
-
+ 
     // MARK: - Composition
-
+ 
     private func buildComposition(
-        from asset: AVURLAsset
+        from asset: AVURLAsset,
+        sourceTrack: AVAssetTrack
     ) async throws -> (AVMutableComposition, AVMutableCompositionTrack) {
-        guard let videoTrack = try await asset.loadTracks(withMediaType: .video).first else {
-            throw VideoProcessingError.noVideoTrack
-        }
-
         let composition = AVMutableComposition()
-
+ 
         guard let compositionTrack = composition.addMutableTrack(
             withMediaType: .video,
             preferredTrackID: kCMPersistentTrackID_Invalid
         ) else {
             throw VideoProcessingError.compositionTrackFailed
         }
-
+ 
         do {
             try await compositionTrack.insertTimeRange(
                 CMTimeRange(start: .zero, duration: asset.load(.duration)),
-                of: videoTrack,
+                of: sourceTrack,
                 at: .zero
             )
         } catch {
             SentrySDK.capture(error: error)
             throw error
         }
-
+ 
         return (composition, compositionTrack)
     }
-
-    private func loadVideoSize(from asset: AVURLAsset) async throws -> CGSize {
-        guard let videoTrack = try await asset.loadTracks(withMediaType: .video).first else {
-            throw VideoProcessingError.noVideoTrack
-        }
-        do {
-            return try await videoTrack.load(.naturalSize)
-        } catch {
-            SentrySDK.capture(error: error)
-            throw error
-        }
+ 
+    /// Returns the render size that matches what the viewer actually sees,
+    /// accounting for the 90°/270° rotation stored in `preferredTransform`.
+    private func transformedSize(naturalSize: CGSize, transform: CGAffineTransform) -> CGSize {
+        let isPortrait = abs(transform.b) == 1 && abs(transform.c) == 1
+        return isPortrait
+            ? CGSize(width: naturalSize.height, height: naturalSize.width)
+            : naturalSize
     }
-
+ 
     // MARK: - Video composition
-
+ 
     private func buildVideoComposition(
         size: CGSize,
         duration: CMTime,
         compositionTrack: AVMutableCompositionTrack,
+        preferredTransform: CGAffineTransform,
         overlayImage: CGImage
     ) -> AVMutableVideoComposition {
         let videoComposition = AVMutableVideoComposition()
         videoComposition.renderSize = size
         videoComposition.frameDuration = CMTime(value: 1, timescale: 30)
-        videoComposition.instructions = [makeInstruction(for: compositionTrack, duration: duration)]
+        videoComposition.instructions = [
+            makeInstruction(for: compositionTrack, duration: duration, transform: preferredTransform)
+        ]
         videoComposition.animationTool = makeAnimationTool(
             size: size,
             duration: duration,
@@ -96,21 +103,25 @@ struct VideoCompositor {
         )
         return videoComposition
     }
-
+ 
     private func makeInstruction(
         for track: AVMutableCompositionTrack,
-        duration: CMTime
+        duration: CMTime,
+        transform: CGAffineTransform
     ) -> AVMutableVideoCompositionInstruction {
+        let layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
+        // Applying the source track's preferred transform preserves the
+        // original orientation (e.g. portrait video shot on iPhone).
+        layerInstruction.setTransform(transform, at: .zero)
+ 
         let instruction = AVMutableVideoCompositionInstruction()
         instruction.timeRange = CMTimeRange(start: .zero, duration: duration)
-        instruction.layerInstructions = [
-            AVMutableVideoCompositionLayerInstruction(assetTrack: track)
-        ]
+        instruction.layerInstructions = [layerInstruction]
         return instruction
     }
-
+ 
     // MARK: - Core Animation tool
-
+ 
     private func makeAnimationTool(
         size: CGSize,
         duration: CMTime,
@@ -118,24 +129,24 @@ struct VideoCompositor {
     ) -> AVVideoCompositionCoreAnimationTool {
         let parentLayer = CALayer()
         parentLayer.frame = CGRect(origin: .zero, size: size)
-
+ 
         let videoLayer = CALayer()
         videoLayer.frame = CGRect(origin: .zero, size: size)
         parentLayer.addSublayer(videoLayer)
-
+ 
         let overlayLayer = makeThumbnailOnlyOverlayLayer(
             image: overlayImage,
             size: size,
             duration: duration
         )
         parentLayer.addSublayer(overlayLayer)
-
+ 
         return AVVideoCompositionCoreAnimationTool(
             postProcessingAsVideoLayer: videoLayer,
             in: parentLayer
         )
     }
-
+ 
     /// Returns a `CALayer` that shows `image` only on the first frame, then
     /// immediately hides itself so it acts as a thumbnail-only watermark.
     private func makeThumbnailOnlyOverlayLayer(
@@ -147,7 +158,7 @@ struct VideoCompositor {
         layer.contents = image
         layer.frame = CGRect(origin: .zero, size: size)
         layer.opacity = 1.0
-
+ 
         let animation = CAKeyframeAnimation(keyPath: "opacity")
         animation.values   = [1.0, 1.0, 0.0]
         animation.keyTimes = [
@@ -160,12 +171,12 @@ struct VideoCompositor {
         animation.isRemovedOnCompletion = false
         animation.fillMode            = .forwards
         layer.add(animation, forKey: "thumbnailOnly")
-
+ 
         return layer
     }
-
+ 
     // MARK: - Export
-
+ 
     private func export(
         composition: AVMutableComposition,
         videoComposition: AVMutableVideoComposition,
@@ -177,12 +188,12 @@ struct VideoCompositor {
         ) else {
             throw VideoProcessingError.exportSessionFailed
         }
-
+ 
         exportSession.shouldOptimizeForNetworkUse = true
         exportSession.videoComposition = videoComposition
-
+ 
         try removeExistingFile(at: outputURL)
-
+ 
         do {
             try await exportSession.export(to: outputURL, as: .mov)
         } catch {
@@ -190,7 +201,7 @@ struct VideoCompositor {
             throw error
         }
     }
-
+ 
     private func removeExistingFile(at url: URL) throws {
         guard FileManager.default.fileExists(atPath: url.path) else { return }
         do {
@@ -201,3 +212,4 @@ struct VideoCompositor {
         }
     }
 }
+ 

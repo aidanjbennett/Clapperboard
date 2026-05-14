@@ -119,9 +119,8 @@ class ClapperboardViewModel {
     }
 
     private func processVideo(inputURL: URL, outputURL: URL) async throws {
-        let videoDimensions = await videoSize(for: inputURL)
         let overlayImage = await ClapperboardRenderer(configuration: configuration)
-            .render(size: videoDimensions)
+            .render(size: videoSize(for: inputURL))
 
         try await VideoCompositor().process(
             inputURL: inputURL,
@@ -130,18 +129,22 @@ class ClapperboardViewModel {
         )
     }
 
-    /// Reads the natural size of the first video track so the renderer can
-    /// produce an exactly-sized overlay. Falls back to 1080p if loading fails.
-    private func videoSize(for url: URL) async -> CGSize {
+    /// Reads the display size of the first video track (natural size with the
+    /// preferred transform applied) so the renderer produces a correctly-oriented
+    /// overlay. Falls back to 1080×1920 (portrait) if loading fails.
+    private func videoSize(for url: URL) -> CGSize {
         let asset = AVURLAsset(url: url)
-        // Synchronous snapshot becomes async. Acceptable here because we're already on a background task and only need an approximate size for layout.
-        do {
-            let tracks = try await asset.loadTracks(withMediaType: .video)
-            return tracks.first?.naturalSize ?? CGSize(width: 1920, height: 1080)
-        } catch {
-            print("Failed to load video tracks: \(error)")
-            return CGSize(width: 1920, height: 1080)
+        // Synchronous snapshot – acceptable here because we're already on a
+        // background task and only need an approximate size for layout.
+        guard let track = try? asset.tracks(withMediaType: .video).first else {
+            return CGSize(width: 1080, height: 1920)
         }
+        let natural   = track.naturalSize
+        let transform = track.preferredTransform
+        let isPortrait = abs(transform.b) == 1 && abs(transform.c) == 1
+        return isPortrait
+            ? CGSize(width: natural.height, height: natural.width)
+            : natural
     }
 
     private func verifyOutput(at url: URL) throws {
