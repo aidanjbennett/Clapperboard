@@ -38,7 +38,8 @@ struct ClapperboardEditingView: View {
                 viewModelTitle: $viewModel.title,
                 viewModelScene: $viewModel.scene,
                 viewModelTake: $viewModel.take,
-                viewModelDirector: $viewModel.director
+                viewModelDirector: $viewModel.director,
+                viewModelDate: $viewModel.date,
             )
             
             if viewModel.isProcessing {

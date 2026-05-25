@@ -38,8 +38,15 @@ class ClapperboardViewModel {
     var scene:    String { get { configuration.scene }    set { configuration.scene    = newValue } }
     var take:     String { get { configuration.take }     set { configuration.take     = newValue } }
     var director: String { get { configuration.director } set { configuration.director = newValue } }
-    var date:     String { configuration.date }
+    var date: Date { get { configuration.selectedDate }   set { configuration.selectedDate = newValue } }
 
+    // Formatted date string for rendering on the clapperboard
+    var formattedDate: String {
+        configuration.selectedDate.formatted(
+            date: .abbreviated,
+            time: .omitted
+        )
+    }
     // MARK: - Photos lifecycle
 
     func loadContent(contentEditingInput: PHContentEditingInput, placeholderImage: UIImage) {

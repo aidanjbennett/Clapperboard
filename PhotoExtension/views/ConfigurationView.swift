@@ -13,6 +13,7 @@ struct ConfigurationView: View {
     let viewModelScene: Binding<String>
     let viewModelTake: Binding<String>
     let viewModelDirector: Binding<String>
+    let viewModelDate: Binding<Date>
     
     var body: some View {
         // Clapperboard Configuration
@@ -27,6 +28,21 @@ struct ConfigurationView: View {
                 InputView(textFieldText: viewModelTake, textFieldTitle: "1", title: "Take:")
                 InputView(textFieldText: viewModelDirector, textFieldTitle: "Your name", title: "Director:")
             }
+            
+            // Date Picker
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Date:")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                
+                DatePicker(
+                    "Select Date",
+                    selection: viewModelDate,
+                    displayedComponents: .date
+                )
+                .labelsHidden()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding()
         .background(Color(.systemGray6))
@@ -35,5 +51,5 @@ struct ConfigurationView: View {
 }
 
 #Preview {
-//    ConfigurationView()
+    //    ConfigurationView()
 }
