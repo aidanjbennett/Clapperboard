@@ -120,7 +120,7 @@ class ClapperboardViewModel {
 
     private func processVideo(inputURL: URL, outputURL: URL) async throws {
         let overlayImage = await ClapperboardRenderer(configuration: configuration)
-            .render(size: videoSize(for: inputURL))
+            .render(size: await videoSize(for: inputURL))
 
         try await VideoCompositor().process(
             inputURL: inputURL,
@@ -132,19 +132,25 @@ class ClapperboardViewModel {
     /// Reads the display size of the first video track (natural size with the
     /// preferred transform applied) so the renderer produces a correctly-oriented
     /// overlay. Falls back to 1080×1920 (portrait) if loading fails.
-    private func videoSize(for url: URL) -> CGSize {
+    private func videoSize(for url: URL) async -> CGSize {
         let asset = AVURLAsset(url: url)
         // Synchronous snapshot – acceptable here because we're already on a
         // background task and only need an approximate size for layout.
-        guard let track = try? asset.tracks(withMediaType: .video).first else {
+        guard let track = try? await asset.load(.tracks).first(where: { $0.mediaType == .video }) else {
             return CGSize(width: 1080, height: 1920)
         }
-        let natural   = track.naturalSize
-        let transform = track.preferredTransform
-        let isPortrait = abs(transform.b) == 1 && abs(transform.c) == 1
-        return isPortrait
-            ? CGSize(width: natural.height, height: natural.width)
-            : natural
+
+        do {
+            let natural = try await track.load(.naturalSize)
+            let transform = try await track.load(.preferredTransform)
+                        
+            let isPortrait = abs(transform.b) == 1 && abs(transform.c) == 1
+            return isPortrait
+                ? CGSize(width: natural.height, height: natural.width)
+                : natural
+        } catch {
+            return CGSize(width: 1080, height: 1920)
+        }
     }
 
     private func verifyOutput(at url: URL) throws {
@@ -163,3 +169,4 @@ class ClapperboardViewModel {
         print("  mediaType: \(input.mediaType.rawValue)")
     }
 }
+
