@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DDD5A6742FB49F17008A82A6 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = DDD5A6732FB49F17008A82A6 /* Sentry */; };
-		DDD5A6842FB49F3A008A82A6 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = DDD5A6832FB49F3A008A82A6 /* Sentry */; };
+		DD498C522FB908A700626302 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = DD498C512FB908A700626302 /* Sentry */; };
 		DDDCC34D2FB49A9B00FB5167 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		DDE1E0F12EC0FF5E00FF15EA /* PhotoExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DDEFADB62E848AE0003E520D /* PhotoExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DDEFADB72E848AE0003E520D /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD189BAC2E84758F006FA7EE /* PhotosUI.framework */; };
@@ -85,7 +84,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDDCC34D2FB49A9B00FB5167 /* (null) in Frameworks */,
-				DDD5A6842FB49F3A008A82A6 /* Sentry in Frameworks */,
+				DD498C522FB908A700626302 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,7 +94,6 @@
 			files = (
 				DDEFADB72E848AE0003E520D /* PhotosUI.framework in Frameworks */,
 				DDEFADB82E848AE0003E520D /* Photos.framework in Frameworks */,
-				DDD5A6742FB49F17008A82A6 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,7 +152,7 @@
 			);
 			name = Clapperboard;
 			packageProductDependencies = (
-				DDD5A6832FB49F3A008A82A6 /* Sentry */,
+				DD498C512FB908A700626302 /* Sentry */,
 			);
 			productName = Clapperboard;
 			productReference = DDA0549B2E9F9923005CE771 /* Clapperboard.app */;
@@ -177,7 +175,6 @@
 			);
 			name = PhotoExtension;
 			packageProductDependencies = (
-				DDD5A6732FB49F17008A82A6 /* Sentry */,
 			);
 			productName = ClapperEdit;
 			productReference = DDEFADB62E848AE0003E520D /* PhotoExtension.appex */;
@@ -211,7 +208,7 @@
 			mainGroup = DD189B8F2E8465FB006FA7EE;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				DDD5A6722FB49F17008A82A6 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				DD498C502FB908A700626302 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DD189B992E8465FB006FA7EE /* Products */;
@@ -428,6 +425,8 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Clapperboard;
+				INFOPLIST_KEY_ITSEncryptionExportComplianceCode = No;
+				"INFOPLIST_KEY_ITSEncryptionExportComplianceCode[sdk=*]" = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -471,6 +470,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Clapperboard;
+				INFOPLIST_KEY_ITSEncryptionExportComplianceCode = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -610,7 +610,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		DDD5A6722FB49F17008A82A6 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+		DD498C502FB908A700626302 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
 			requirement = {
@@ -623,14 +623,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		DDD5A6732FB49F17008A82A6 /* Sentry */ = {
+		DD498C512FB908A700626302 /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DDD5A6722FB49F17008A82A6 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = Sentry;
-		};
-		DDD5A6832FB49F3A008A82A6 /* Sentry */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DDD5A6722FB49F17008A82A6 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			package = DD498C502FB908A700626302 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
 		};
 /* End XCSwiftPackageProductDependency section */
