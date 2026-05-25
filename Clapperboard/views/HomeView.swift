@@ -13,7 +13,6 @@ struct HomeView: View {
     @FocusState private var nameIsFocused: Bool
 
     var body: some View {
-        NavigationStack {
             Form {
                 Section {
                     VStack(alignment: .center, spacing: 8) {
@@ -63,7 +62,6 @@ struct HomeView: View {
             }
             .navigationTitle("Home")
         }
-    }
 }
 
 #Preview {

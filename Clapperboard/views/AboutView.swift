@@ -10,7 +10,6 @@ import SwiftUI
 struct AboutView: View {
     
     var body: some View {
-        NavigationStack {
             List {
                 AboutHeaderView()
                 AboutDeveloperInfoView()
@@ -18,7 +17,6 @@ struct AboutView: View {
             }
             .navigationTitle("About")
         }
-    }
 }
 
 #Preview {
