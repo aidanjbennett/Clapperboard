@@ -14,104 +14,106 @@ struct ClapperboardEditingView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            GeometryReader { geometry in
+                VStack(spacing: 20) {
 
-                // Clapperboard Configuration
-                VStack(alignment: .leading, spacing: 20) {
+                    // Clapperboard Configuration
+                    VStack(alignment: .leading, spacing: 20) {
 
-                    Label("Clapperboard Details", systemImage: "film.clapper")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
+                        Label("Clapperboard Details", systemImage: "film.clapper")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.secondary)
 
-                    if let placeholderImage = viewModel.placeholderImage {
+                        if let placeholderImage = viewModel.placeholderImage {
 
-                        VStack(spacing: 12) {
+                            VStack(spacing: 12) {
 
-                            // Preview
-                            Image(uiImage: placeholderImage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(maxWidth: .infinity, maxHeight: 140)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .strokeBorder(
-                                            Color(.separator),
-                                            lineWidth: 0.5
-                                        )
-                                )
+                                // Preview
+                                Image(uiImage: placeholderImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxWidth: .infinity, maxHeight: 140)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .strokeBorder(
+                                                Color(.separator),
+                                                lineWidth: 0.5
+                                            )
+                                    )
 
-                            // Scene + Take
-                            HStack(spacing: 12) {
+                                // Scene + Take
+                                HStack(spacing: 12) {
 
-                                InputView(
-                                    textFieldText: $viewModel.scene,
-                                    textFieldTitle: "1",
-                                    title: "Scene"
-                                )
+                                    InputView(
+                                        textFieldText: $viewModel.scene,
+                                        textFieldTitle: "1",
+                                        title: "Scene"
+                                    )
 
-                                InputView(
-                                    textFieldText: $viewModel.take,
-                                    textFieldTitle: "1",
-                                    title: "Take"
+                                    InputView(
+                                        textFieldText: $viewModel.take,
+                                        textFieldTitle: "1",
+                                        title: "Take"
+                                    )
+                                }
+
+                                Divider()
+
+                                // Title + Director
+                                HStack(spacing: 12) {
+
+                                    InputView(
+                                        textFieldText: $viewModel.title,
+                                        textFieldTitle: "Scene title",
+                                        title: "Title"
+                                    )
+
+                                    InputView(
+                                        textFieldText: $viewModel.director,
+                                        textFieldTitle: "Your name",
+                                        title: "Director"
+                                    )
+                                }
+
+                                // Date
+                                DateInputView(
+                                    title: "Date",
+                                    date: $viewModel.date
                                 )
                             }
-
-                            Divider()
-
-                            // Title + Director
-                            HStack(spacing: 12) {
-
-                                InputView(
-                                    textFieldText: $viewModel.title,
-                                    textFieldTitle: "Scene title",
-                                    title: "Title"
-                                )
-
-                                InputView(
-                                    textFieldText: $viewModel.director,
-                                    textFieldTitle: "Your name",
-                                    title: "Director"
-                                )
-                            }
-
-                            // Date
-                            DateInputView(
-                                title: "Date",
-                                date: $viewModel.date
-                            )
                         }
                     }
-                }
-                .padding(16)
-                .background(Color(.secondarySystemGroupedBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 14))
-                .shadow(
-                    color: .black.opacity(0.06),
-                    radius: 8,
-                    x: 0,
-                    y: 2
-                )
+                    .padding(16)
+                    .background(Color(.secondarySystemGroupedBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .shadow(
+                        color: .black.opacity(0.06),
+                        radius: 8,
+                        x: 0,
+                        y: 2
+                    )
 
-                if viewModel.isProcessing {
-                    VStack(spacing: 8) {
+                    if viewModel.isProcessing {
+                        VStack(spacing: 8) {
 
-                        ProgressView()
-                            .scaleEffect(1.2)
+                            ProgressView()
+                                .scaleEffect(1.2)
 
-                        Text("Adding clapperboard to video...")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            Text("Adding clapperboard to video...")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding()
                     }
-                    .padding()
-                }
 
-                Spacer(minLength: 0)
+                    Spacer(minLength: 0)
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: geometry.size.height - 32)
             }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .frame(minHeight: UIScreen.main.bounds.height - 32)
         }
         .scrollDismissesKeyboard(.interactively)
     }

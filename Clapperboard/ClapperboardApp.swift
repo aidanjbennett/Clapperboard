@@ -8,7 +8,6 @@
 import SwiftUI
 import Sentry
 
-
 @main
 struct ClapperboardApp: App {
     init() {
@@ -18,16 +17,32 @@ struct ClapperboardApp: App {
             // Adds IP for users.
             // For more information, visit: https://docs.sentry.io/platforms/apple/data-management/data-collected/
             options.sendDefaultPii = true
-
+            
+            #if DEBUG
+            options.debug = true
+            options.diagnosticLevel = .debug
+            
+            options.tracesSampleRate = 1
+            
+            options.configureProfiling = {
+                $0.sessionSampleRate = 1
+                $0.lifecycle = .trace
+            }
+            
+            #else
+            options.debug = false
+            options.diagnosticLevel = .error
+            
             // Set tracesSampleRate to 0.1 to capture 10% of transactions for performance monitoring.
             options.tracesSampleRate = 0.1
-
+            
             // Configure profiling. Visit https://docs.sentry.io/platforms/apple/profiling/ to learn more.
             options.configureProfiling = {
                 $0.sessionSampleRate = 0.1
                 $0.lifecycle = .trace
             }
             
+            #endif
         }
     }
     

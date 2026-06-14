@@ -6,17 +6,32 @@
 //
 
 import SwiftUI
+import Sentry
 
 struct RootView: View {
     // Get from user defaults
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
-
+    
     var body: some View {
-        if hasSeenOnboarding {
-            ContentView()
-        } else {
-            OnboardingView()
-        }
+          Group {
+              if hasSeenOnboarding {
+                  ContentView()
+              } else {
+                  OnboardingView()
+              }
+          }
+          .onAppear {
+              // Test sentry error
+              #if DEBUG
+              let error = NSError(
+                     domain: "Clapperboard",
+                     code: 999,
+                     userInfo: [NSLocalizedDescriptionKey: "Sentry test error"]
+                 )
+
+              SentrySDK.capture(error: error)
+              #endif
+          }
     }
 }
 

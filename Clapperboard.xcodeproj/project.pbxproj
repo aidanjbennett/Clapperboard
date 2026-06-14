@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DD498C522FB908A700626302 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = DD498C512FB908A700626302 /* Sentry */; };
+		DD24D4042FCAE5C800BA4FEE /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = DD24D4032FCAE5C800BA4FEE /* Sentry */; };
+		DD24D4062FCAE5DD00BA4FEE /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = DD24D4052FCAE5DD00BA4FEE /* Sentry */; };
 		DDDCC34D2FB49A9B00FB5167 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		DDE1E0F12EC0FF5E00FF15EA /* PhotoExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DDEFADB62E848AE0003E520D /* PhotoExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DDEFADB72E848AE0003E520D /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD189BAC2E84758F006FA7EE /* PhotosUI.framework */; };
@@ -60,6 +61,13 @@
 			);
 			target = DDEFADB52E848AE0003E520D /* PhotoExtension */;
 		};
+		DDC0A9912FCAD30E00C6493C /* Exceptions for "Clapperboard" folder in "Clapperboard" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = DDA0549A2E9F9923005CE771 /* Clapperboard */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -73,6 +81,9 @@
 		};
 		DDA0549C2E9F9923005CE771 /* Clapperboard */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DDC0A9912FCAD30E00C6493C /* Exceptions for "Clapperboard" folder in "Clapperboard" target */,
+			);
 			path = Clapperboard;
 			sourceTree = "<group>";
 		};
@@ -84,7 +95,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDDCC34D2FB49A9B00FB5167 /* (null) in Frameworks */,
-				DD498C522FB908A700626302 /* Sentry in Frameworks */,
+				DD24D4062FCAE5DD00BA4FEE /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +105,7 @@
 			files = (
 				DDEFADB72E848AE0003E520D /* PhotosUI.framework in Frameworks */,
 				DDEFADB82E848AE0003E520D /* Photos.framework in Frameworks */,
+				DD24D4042FCAE5C800BA4FEE /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,6 +152,7 @@
 				DDA054992E9F9923005CE771 /* Resources */,
 				DDE1E0F42EC0FF5E00FF15EA /* Embed Foundation Extensions */,
 				393F880B686845759993E014 /* Upload Debug Symbols to Sentry */,
+				DD24D4072FCAE79800BA4FEE /*  Copy SPM dSYMs (From Claude) */,
 			);
 			buildRules = (
 			);
@@ -152,7 +165,7 @@
 			);
 			name = Clapperboard;
 			packageProductDependencies = (
-				DD498C512FB908A700626302 /* Sentry */,
+				DD24D4052FCAE5DD00BA4FEE /* Sentry */,
 			);
 			productName = Clapperboard;
 			productReference = DDA0549B2E9F9923005CE771 /* Clapperboard.app */;
@@ -175,6 +188,7 @@
 			);
 			name = PhotoExtension;
 			packageProductDependencies = (
+				DD24D4032FCAE5C800BA4FEE /* Sentry */,
 			);
 			productName = ClapperEdit;
 			productReference = DDEFADB62E848AE0003E520D /* PhotoExtension.appex */;
@@ -208,7 +222,7 @@
 			mainGroup = DD189B8F2E8465FB006FA7EE;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				DD498C502FB908A700626302 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				DD24D4022FCAE5C800BA4FEE /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DD189B992E8465FB006FA7EE /* Products */;
@@ -253,6 +267,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# This script is responsible for uploading debug symbols and source context for Sentry.\nif which sentry-cli >/dev/null; then\n  export SENTRY_ORG=aidanjbennett\n  export SENTRY_PROJECT=clapperboard\n  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\n  if [ ! $? -eq 0 ]; then\n    echo \"warning: sentry-cli - $ERROR\"\n  fi\nelse\n  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
+		};
+		DD24D4072FCAE79800BA4FEE /*  Copy SPM dSYMs (From Claude) */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = " Copy SPM dSYMs (From Claude)";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "# Upload Debug Symbols to Sentry\n# Copies Sentry dSYMs into the archive folder (satisfies Xcode validation)\n# then uploads all debug symbols and source context to Sentry.\n\n# Copy Sentry dSYMs into the archive dSYM folder\nfind \"${BUILD_DIR}\" \\\n  -name \"Sentry*.dSYM\" 2>/dev/null | while read dsym; do\n    cp -r \"$dsym\" \"${DWARF_DSYM_FOLDER_PATH}\"\ndone\n\nif which sentry-cli >/dev/null; then\n  export SENTRY_ORG=aidanjbennett\n  export SENTRY_PROJECT=clapperboard\n  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\n  if [ ! $? -eq 0 ]; then\n    echo \"warning: sentry-cli - $ERROR\"\n  fi\nelse\n  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -424,8 +457,10 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Clapperboard;
-				INFOPLIST_KEY_ITSEncryptionExportComplianceCode = No;
+				INFOPLIST_FILE = Clapperboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Clapperboard Pro";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_ITSEncryptionExportComplianceCode = "";
 				"INFOPLIST_KEY_ITSEncryptionExportComplianceCode[sdk=*]" = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -469,8 +504,10 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Clapperboard;
-				INFOPLIST_KEY_ITSEncryptionExportComplianceCode = NO;
+				INFOPLIST_FILE = Clapperboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Clapperboard Pro";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_ITSEncryptionExportComplianceCode = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -509,7 +546,7 @@
 				DEVELOPMENT_TEAM = 7VHQY77VA5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "ClapperBoard Extension";
+				INFOPLIST_KEY_CFBundleDisplayName = "ClapperBoard Pro Extension";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Allow access to record new clapperboard footage.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Aidan James Bennett";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow access to capture clapperboard sound.";
@@ -548,7 +585,7 @@
 				DEVELOPMENT_TEAM = 7VHQY77VA5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "ClapperBoard Extension";
+				INFOPLIST_KEY_CFBundleDisplayName = "ClapperBoard Pro Extension";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Allow access to record new clapperboard footage.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Aidan James Bennett";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow access to capture clapperboard sound.";
@@ -610,12 +647,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		DD498C502FB908A700626302 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+		DD24D4022FCAE5C800BA4FEE /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 9.13.0;
+				minimumVersion = 9.15.0;
 			};
 			traits = (
 			);
@@ -623,9 +660,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		DD498C512FB908A700626302 /* Sentry */ = {
+		DD24D4032FCAE5C800BA4FEE /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DD498C502FB908A700626302 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			package = DD24D4022FCAE5C800BA4FEE /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		DD24D4052FCAE5DD00BA4FEE /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD24D4022FCAE5C800BA4FEE /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
 		};
 /* End XCSwiftPackageProductDependency section */
