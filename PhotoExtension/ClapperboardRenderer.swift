@@ -170,8 +170,28 @@ struct ClapperboardRenderer {
         drawHorizontalRule(ctx, size: size, y: yPos, scale: layout.scale)
         yPos += layout.lineSpacing * 1.5
 
-        // Metadata columns
+        // Metadata: Director / Date on the first row, Scene / Take on their
+        // own row beneath so a long value in either field can't bleed into
+        // its neighbouring column.
+        let rowHeight = layout.labelFontSize + layout.bodyFontSize + 8 * layout.scale
+
         drawMetadataRow(
+            items: [
+                ("DIRECTOR", configuration.director.uppercased()),
+                ("DATE", configuration.date)
+            ],
+            bodyAttrs: bodyAttrs,
+            labelAttrs: labelAttrs,
+            layout: layout,
+            yPos: yPos
+        )
+        yPos += rowHeight + layout.lineSpacing
+
+        drawMetadataRow(
+            items: [
+                ("SCENE", configuration.scene),
+                ("TAKE", configuration.take)
+            ],
             bodyAttrs: bodyAttrs,
             labelAttrs: labelAttrs,
             layout: layout,
@@ -189,24 +209,29 @@ struct ClapperboardRenderer {
     }
 
     private func drawMetadataRow(
+        items: [(label: String, value: String)],
         bodyAttrs: [NSAttributedString.Key: Any],
         labelAttrs: [NSAttributedString.Key: Any],
         layout: Layout,
         yPos: CGFloat
     ) {
-        let items: [(label: String, value: String)] = [
-            ("DIRECTOR", configuration.director.uppercased()),
-            ("SCENE",    configuration.scene),
-            ("TAKE",     configuration.take),
-            ("DATE",     configuration.date)
-        ]
-
         let columnWidth = layout.overlayWidth / CGFloat(items.count)
 
         for (index, item) in items.enumerated() {
             let colCenterX = layout.sideInset + columnWidth * CGFloat(index) + columnWidth / 2
+
             drawCentred(item.label, attributes: labelAttrs, centerX: colCenterX, y: yPos)
-            drawCentred(item.value, attributes: bodyAttrs, centerX: colCenterX, y: yPos + layout.labelFontSize + 4 * layout.scale)
+
+            // Clamp the value so a long scene/director name can't overflow
+            // into the neighbouring column.
+            let maxValueWidth = columnWidth - layout.padding
+            drawCentred(
+                item.value,
+                attributes: bodyAttrs,
+                centerX: colCenterX,
+                y: yPos + layout.labelFontSize + 4 * layout.scale,
+                maxWidth: maxValueWidth
+            )
         }
     }
 
@@ -216,10 +241,54 @@ struct ClapperboardRenderer {
         _ string: String,
         attributes: [NSAttributedString.Key: Any],
         centerX: CGFloat,
-        y: CGFloat
+        y: CGFloat,
+        maxWidth: CGFloat? = nil
     ) {
-        let nsString = string as NSString
-        let textSize = nsString.size(withAttributes: attributes)
-        nsString.draw(at: CGPoint(x: centerX - textSize.width / 2, y: y), withAttributes: attributes)
+        var drawString = string
+        var drawAttributes = attributes
+
+        if let maxWidth, !string.isEmpty {
+            let fullSize = (string as NSString).size(withAttributes: attributes)
+
+            if fullSize.width > maxWidth {
+                // Try shrinking the font slightly first (down to 70% size)
+                // before falling back to truncation, so short overages
+                // (e.g. "Songs About Town") shrink rather than clip.
+                if let font = attributes[.font] as? UIFont {
+                    var scaleFactor = maxWidth / fullSize.width
+                    scaleFactor = max(scaleFactor, 0.7)
+                    let scaledFont = font.withSize(font.pointSize * scaleFactor)
+                    drawAttributes[.font] = scaledFont
+
+                    let scaledSize = (string as NSString).size(withAttributes: drawAttributes)
+                    if scaledSize.width > maxWidth {
+                        drawString = truncate(string, attributes: drawAttributes, maxWidth: maxWidth)
+                    }
+                } else {
+                    drawString = truncate(string, attributes: drawAttributes, maxWidth: maxWidth)
+                }
+            }
+        }
+
+        let nsString = drawString as NSString
+        let textSize = nsString.size(withAttributes: drawAttributes)
+        nsString.draw(at: CGPoint(x: centerX - textSize.width / 2, y: y), withAttributes: drawAttributes)
+    }
+
+    private func truncate(
+        _ string: String,
+        attributes: [NSAttributedString.Key: Any],
+        maxWidth: CGFloat
+    ) -> String {
+        var truncated = string
+        while truncated.count > 1 {
+            let candidate = truncated + "…"
+            let size = (candidate as NSString).size(withAttributes: attributes)
+            if size.width <= maxWidth {
+                return candidate
+            }
+            truncated.removeLast()
+        }
+        return truncated
     }
 }
