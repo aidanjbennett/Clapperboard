@@ -40,11 +40,11 @@ class PhotoEditingViewController: UIViewController, PHContentEditingController {
     }
     
     func startContentEditing(with contentEditingInput: PHContentEditingInput, placeholderImage: UIImage) {
-        print("🎬 startContentEditing called")
+        print("startContentEditing called")
 
         // If the input already contains a video asset or an image URL, use it
         if contentEditingInput.audiovisualAsset != nil || contentEditingInput.fullSizeImageURL != nil {
-            print("📀 Using provided PHContentEditingInput directly")
+            print("Using provided PHContentEditingInput directly")
             clapperboardEditingView.loadContent(contentEditingInput: contentEditingInput,
                                                 placeholderImage: placeholderImage)
             return
@@ -58,7 +58,7 @@ class PhotoEditingViewController: UIViewController, PHContentEditingController {
 
     
     func finishContentEditing(completionHandler: @escaping (PHContentEditingOutput?) -> Void) {
-        print("🎬 finishContentEditing called")
+        print("finishContentEditing called")
         clapperboardEditingView.exportVideo(completionHandler: completionHandler)
     }
     
@@ -67,6 +67,6 @@ class PhotoEditingViewController: UIViewController, PHContentEditingController {
     }
     
     func cancelContentEditing() {
-        print("🎬 cancelContentEditing called")
+        print("cancelContentEditing called")
     }
 }
