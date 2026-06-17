@@ -171,9 +171,9 @@ class ClapperboardViewModel {
 
     private func logURLDiagnostics(for input: PHContentEditingInput) {
         print("No video URL found. Available properties:")
-        print("  fullSizeImageURL: \(input.fullSizeImageURL?.absoluteString ?? "nil")")
-        print("  audiovisualAsset: \(input.audiovisualAsset != nil ? "present" : "nil")")
-        print("  mediaType: \(input.mediaType.rawValue)")
+        print("fullSizeImageURL: \(input.fullSizeImageURL?.absoluteString ?? "nil")")
+        print("audiovisualAsset: \(input.audiovisualAsset != nil ? "present" : "nil")")
+        print("mediaType: \(input.mediaType.rawValue)")
     }
 }
 
