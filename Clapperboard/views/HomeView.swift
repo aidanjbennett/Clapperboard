@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import AppTrackingTransparency
+import GoogleMobileAds
 
 struct HomeView: View {
     
@@ -51,6 +53,12 @@ struct HomeView: View {
                         .foregroundStyle(.secondary)
                         .padding(.vertical, 4)
                 }
+                
+                BannerAdView(
+                             adUnitID: "ca-app-pub-7173006780619406~1224612011",
+                             adSize: largeAnchoredAdaptiveBanner(width: UIScreen.main.bounds.width)
+                         )
+                         .frame(height: 60)
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -61,7 +69,7 @@ struct HomeView: View {
                 }
             }
             .navigationTitle("Home")
-        }
+    }
 }
 
 #Preview {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		DD24D4042FCAE5C800BA4FEE /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = DD24D4032FCAE5C800BA4FEE /* Sentry */; };
 		DD24D4062FCAE5DD00BA4FEE /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = DD24D4052FCAE5DD00BA4FEE /* Sentry */; };
+		DDD1ACDB2FED85C2007F7304 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = DDD1ACDA2FED85C2007F7304 /* GoogleMobileAds */; };
 		DDDCC34D2FB49A9B00FB5167 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		DDE1E0F12EC0FF5E00FF15EA /* PhotoExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DDEFADB62E848AE0003E520D /* PhotoExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DDEFADB72E848AE0003E520D /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD189BAC2E84758F006FA7EE /* PhotosUI.framework */; };
@@ -94,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDD1ACDB2FED85C2007F7304 /* GoogleMobileAds in Frameworks */,
 				DDDCC34D2FB49A9B00FB5167 /* (null) in Frameworks */,
 				DD24D4062FCAE5DD00BA4FEE /* Sentry in Frameworks */,
 			);
@@ -166,6 +168,7 @@
 			name = Clapperboard;
 			packageProductDependencies = (
 				DD24D4052FCAE5DD00BA4FEE /* Sentry */,
+				DDD1ACDA2FED85C2007F7304 /* GoogleMobileAds */,
 			);
 			productName = Clapperboard;
 			productReference = DDA0549B2E9F9923005CE771 /* Clapperboard.app */;
@@ -223,6 +226,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				DD24D4022FCAE5C800BA4FEE /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				DDD1ACD92FED85C2007F7304 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DD189B992E8465FB006FA7EE /* Products */;
@@ -451,7 +455,7 @@
 				CODE_SIGN_ENTITLEMENTS = Clapperboard/Clapperboard.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 7VHQY77VA5;
 				ENABLE_PREVIEWS = YES;
@@ -473,7 +477,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aidanjbennett.Clapperboard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -481,6 +485,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -498,7 +503,7 @@
 				CODE_SIGN_ENTITLEMENTS = Clapperboard/Clapperboard.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 7VHQY77VA5;
 				ENABLE_PREVIEWS = YES;
@@ -519,7 +524,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aidanjbennett.Clapperboard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -527,6 +532,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -558,7 +564,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aidanjbennett.Clapperboard.PhotoExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -567,6 +573,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
@@ -581,7 +588,7 @@
 				CODE_SIGN_ENTITLEMENTS = PhotoExtension/PhotoExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7VHQY77VA5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoExtension/Info.plist;
@@ -597,7 +604,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aidanjbennett.Clapperboard.PhotoExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -606,6 +613,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
@@ -657,6 +665,14 @@
 			traits = (
 			);
 		};
+		DDD1ACD92FED85C2007F7304 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 13.6.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -669,6 +685,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DD24D4022FCAE5C800BA4FEE /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
+		};
+		DDD1ACDA2FED85C2007F7304 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DDD1ACD92FED85C2007F7304 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

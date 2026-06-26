@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppTrackingTransparency
 
 struct ContentView: View {
     var body: some View {
@@ -23,6 +24,13 @@ struct ContentView: View {
             .tabItem {
                 Label("About", systemImage: "info.circle")
             }
+        }.onAppear {
+            Task {
+                if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
+                    let status = await ATTrackingManager.requestTrackingAuthorization()
+                                // optionally store/log status
+                    }
+                }
         }
     }
 }

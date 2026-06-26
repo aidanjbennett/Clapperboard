@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Sentry
+import GoogleMobileAds
 
 @main
 struct ClapperboardApp: App {
@@ -44,6 +45,8 @@ struct ClapperboardApp: App {
             
             #endif
         }
+        
+        MobileAds.shared.start()
     }
     
     var body: some Scene {

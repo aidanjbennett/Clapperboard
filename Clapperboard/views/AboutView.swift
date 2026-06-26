@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GoogleMobileAds
 
 struct AboutView: View {
     
@@ -14,6 +15,11 @@ struct AboutView: View {
                 AboutHeaderView()
                 AboutDeveloperInfoView()
                 AboutDescriptionView()
+                BannerAdView(
+                             adUnitID: "ca-app-pub-7173006780619406~1224612011",
+                             adSize: largeAnchoredAdaptiveBanner(width: UIScreen.main.bounds.width)
+                         )
+                         .frame(height: 60)
             }
             .navigationTitle("About")
         }
