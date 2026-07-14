@@ -8,9 +8,6 @@
 import Foundation
 import ClapperboardCore
 
-// Pure value type holding all user-facing clapperboard fields.
-/// Can be serialised to `PHAdjustmentData` and passed between layers without
-/// importing UIKit or AVFoundation.
 struct ClapperboardConfiguration {
     
     var title: String
@@ -24,9 +21,8 @@ struct ClapperboardConfiguration {
         formatter.dateStyle = .short
         return formatter.string(from: selectedDate)
     }
-
-    // MARK: - Defaults
-
+    
+    // Default
     static var `default`: ClapperboardConfiguration {
         let storedName = UserDefaults.shared.string(
             forKey: UserDefaults.Keys.name
@@ -40,8 +36,6 @@ struct ClapperboardConfiguration {
             selectedDate: Date()
         )
     }
-
-    // MARK: - Serialisation
 
     func toAdjustmentDataPayload() throws -> Data {
         try JSONSerialization.data(withJSONObject: [
