@@ -14,12 +14,12 @@ struct ClapperboardApp: App {
     init() {
         SentrySDK.start { options in
             options.dsn = "https://0e62762dba491e3da941388f48e6a958@o4509298667094016.ingest.de.sentry.io/4511089404608592"
-                    
+            
             // Adds IP for users.
             // For more information, visit: https://docs.sentry.io/platforms/apple/data-management/data-collected/
             options.sendDefaultPii = true
             
-            #if DEBUG
+#if DEBUG
             options.debug = true
             options.diagnosticLevel = .debug
             
@@ -30,7 +30,7 @@ struct ClapperboardApp: App {
                 $0.lifecycle = .trace
             }
             
-            #else
+#else
             options.debug = false
             options.diagnosticLevel = .error
             
@@ -43,10 +43,12 @@ struct ClapperboardApp: App {
                 $0.lifecycle = .trace
             }
             
-            #endif
+#endif
         }
         
-        MobileAds.shared.start()
+        MobileAds.shared.start { status in
+            print("Adapter statuses: \(status.adapterStatusesByClassName)")
+        }
     }
     
     var body: some Scene {
