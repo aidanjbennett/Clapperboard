@@ -1,6 +1,6 @@
 //
 //  ClapperboardRenderer.swift
-//  PhotoExtension
+//  ClapperboardCore
 //
 //  Created by Aidan Bennett on 13/05/2026.
 //
@@ -8,36 +8,35 @@
 import Foundation
 import UIKit
 import Sentry
-import ClapperboardCore
 
-/// Responsible solely for drawing the clapperboard overlay `CGImage`.
-/// Has no knowledge of AVFoundation or Photos – pure UIKit/CoreGraphics.
-struct ClapperboardRenderer {
+public struct ClapperboardRenderer {
+    
+    public let configuration: ClapperboardConfiguration
 
-    let configuration: ClapperboardConfiguration
+    public init(configuration: ClapperboardConfiguration) {
+         self.configuration = configuration
+     }
+    
+    @MainActor
+    @available(iOS 13.0.0, *)
+    public func render(size: CGSize) -> CGImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
 
-    // MARK: - Public
-
-    func render(size: CGSize) async -> CGImage {
-        await withCheckedContinuation { continuation in
-            let renderer = UIGraphicsImageRenderer(size: size)
-            let image = renderer.image { context in
-                draw(in: context.cgContext, size: size)
-            }
-
-            guard let cgImage = image.cgImage else {
-                SentrySDK.capture(error: VideoProcessingError.clapperboardRenderFailed)
-                let fallback = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1))
-                    .image { _ in }
-                continuation.resume(returning: fallback.cgImage!)
-                return
-            }
-            continuation.resume(returning: cgImage)
+        let image = renderer.image { context in
+            draw(in: context.cgContext, size: size)
         }
+
+        guard let cgImage = image.cgImage else {
+            SentrySDK.capture(error: VideoProcessingError.clapperboardRenderFailed)
+
+            let fallback = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1))
+                .image { _ in }
+
+            return fallback.cgImage!
+        }
+
+        return cgImage
     }
-
-
-    // MARK: - Drawing
 
     private func draw(in ctx: CGContext, size: CGSize) {
         let layout = Layout(size: size)
@@ -203,8 +202,6 @@ struct ClapperboardRenderer {
         }
     }
 
-    // MARK: - Utility
-
     private func drawCentred(
         _ string: String,
         attributes: [NSAttributedString.Key: Any],
@@ -260,3 +257,4 @@ struct ClapperboardRenderer {
         return truncated
     }
 }
+
