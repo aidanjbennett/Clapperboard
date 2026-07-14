@@ -1,13 +1,13 @@
 //
 //  VideoProcessingError.swift
-//  Clapperboard
+//  ClapperboardCore
 //
-//  Created by Aidan Bennett on 14/10/2025.
+//  Created by Aidan Bennett on 14/07/2026.
 //
 
 import Foundation
- 
-enum VideoProcessingError: Error, LocalizedError {
+
+public enum VideoProcessingError: Error, LocalizedError {
     case noContentEditingInput
     case noMediaSource
     case noVideoURL
@@ -17,7 +17,7 @@ enum VideoProcessingError: Error, LocalizedError {
     case outputFileNotFound
     case clapperboardRenderFailed
     
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .noContentEditingInput:   return "No content editing input available."
         case .noMediaSource:           return "No media source found in content editing input."
