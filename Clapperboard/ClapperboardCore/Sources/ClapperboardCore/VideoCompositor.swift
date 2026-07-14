@@ -1,6 +1,6 @@
 //
 //  VideoCompositor.swift
-//  PhotoExtension
+//  ClapperboardCore
 //
 //  Created by Aidan Bennett on 13/05/2026.
 //
@@ -10,15 +10,12 @@ import AVFoundation
 import CoreImage
 import Sentry
 
-
-/// Handles all AVFoundation work: building the composition, attaching the
-/// clapperboard overlay via Core Animation, and exporting the final file.
-/// Has no dependency on Photos or UIKit (the overlay image is injected).
-struct VideoCompositor {
- 
-    // MARK: - Public entry point
- 
-    func process(inputURL: URL, outputURL: URL, overlayImage: CGImage) async throws {
+@available(iOS 15, *)
+public struct VideoCompositor {
+    
+    public init() {}
+  
+    public func process(inputURL: URL, outputURL: URL, overlayImage: CGImage) async throws {
         let asset = AVURLAsset(url: inputURL)
  
         // Load the source track once; share it across helpers to avoid redundant I/O.
@@ -81,7 +78,6 @@ struct VideoCompositor {
             : naturalSize
     }
  
-    // MARK: - Video composition
  
     private func buildVideoComposition(
         size: CGSize,
@@ -119,8 +115,6 @@ struct VideoCompositor {
         instruction.layerInstructions = [layerInstruction]
         return instruction
     }
- 
-    // MARK: - Core Animation tool
  
     private func makeAnimationTool(
         size: CGSize,
