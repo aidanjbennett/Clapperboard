@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ClapperboardCore
 
 // Pure value type holding all user-facing clapperboard fields.
 /// Can be serialised to `PHAdjustmentData` and passed between layers without
