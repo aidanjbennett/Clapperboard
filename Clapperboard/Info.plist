@@ -5,7 +5,7 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>We save edited images to your photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We use your photos so you can attach Clapperboards to your images.</string>
+	<string>We use your photos so you can attach Clapperboards to your images</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>This identifier will be used to deliver ads that are more relevant to you.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
