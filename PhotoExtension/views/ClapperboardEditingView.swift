@@ -11,7 +11,7 @@ import Photos
 struct ClapperboardEditingView: View {
     @State private var viewModel = ClapperboardViewModel()
     @State private var exportTask: Task<PHContentEditingOutput?, Never>?
-
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -46,13 +46,13 @@ struct ClapperboardEditingView: View {
                             HStack(spacing: 12) {
 
                                 InputView(
-                                    textFieldText: $viewModel.scene,
+                                    textFieldText: $viewModel.configuration.scene,
                                     textFieldTitle: "1",
                                     title: "Scene"
                                 )
 
                                 InputView(
-                                    textFieldText: $viewModel.take,
+                                    textFieldText: $viewModel.configuration.take,
                                     textFieldTitle: "1",
                                     title: "Take"
                                 )
@@ -64,13 +64,13 @@ struct ClapperboardEditingView: View {
                             HStack(spacing: 12) {
 
                                 InputView(
-                                    textFieldText: $viewModel.title,
+                                    textFieldText: $viewModel.configuration.title,
                                     textFieldTitle: "Scene title",
                                     title: "Title"
                                 )
 
                                 InputView(
-                                    textFieldText: $viewModel.director,
+                                    textFieldText: $viewModel.configuration.director,
                                     textFieldTitle: "Your name",
                                     title: "Director"
                                 )
@@ -79,7 +79,7 @@ struct ClapperboardEditingView: View {
                             // Date
                             DateInputView(
                                 title: "Date",
-                                date: $viewModel.date
+                                date: $viewModel.configuration.selectedDate
                             )
                         }
                     }

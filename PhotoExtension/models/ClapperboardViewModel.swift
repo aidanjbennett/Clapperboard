@@ -9,36 +9,18 @@ import PhotosUI
 import AVFoundation
 import UIKit
 import Sentry
-
-extension UserDefaults {
-    static let shared = UserDefaults(suiteName: "group.com.aidanjbennett.clapperboard")!
-
-    enum Keys {
-        static let name = "name"
-    }
-}
+import ClapperboardCore
 
 /// Orchestrates the Photos editing lifecycle and delegates all heavy work to
 /// `ClapperboardRenderer` and `VideoCompositor`.
 @Observable
 class ClapperboardViewModel {
-
-    // MARK: - State
-
+    
     var contentEditingInput: PHContentEditingInput?
     var placeholderImage: UIImage?
     var isProcessing = false
 
-    // MARK: - Clapperboard configuration (exposed for the UI)
-
     var configuration: ClapperboardConfiguration = .default
-
-    // Convenience pass-throughs so existing view bindings keep working
-    var title:    String { get { configuration.title }    set { configuration.title    = newValue } }
-    var scene:    String { get { configuration.scene }    set { configuration.scene    = newValue } }
-    var take:     String { get { configuration.take }     set { configuration.take     = newValue } }
-    var director: String { get { configuration.director } set { configuration.director = newValue } }
-    var date: Date { get { configuration.selectedDate }   set { configuration.selectedDate = newValue } }
 
     // Formatted date string for rendering on the clapperboard
     var formattedDate: String {
@@ -47,6 +29,7 @@ class ClapperboardViewModel {
             time: .omitted
         )
     }
+    
     // MARK: - Photos lifecycle
 
     func loadContent(contentEditingInput: PHContentEditingInput, placeholderImage: UIImage) {
