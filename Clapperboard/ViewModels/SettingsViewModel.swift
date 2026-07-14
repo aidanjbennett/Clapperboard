@@ -27,7 +27,7 @@ class SettingsViewModel {
         UserDefaults.standard.removeObject(
             forKey: UserDefaults.Keys.hasSeenOnboarding
         )
-        #endif // DEBUG
+        #endif
     }
 
     func setName(_ name: String) {
