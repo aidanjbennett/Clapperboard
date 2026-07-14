@@ -53,12 +53,11 @@ struct HomeView: View {
                         .foregroundStyle(.secondary)
                         .padding(.vertical, 4)
                 }
+                CollapsibleAdBannerView(
+                    adUnitID: "ca-app-pub-7173006780619406/4564292462"
+                )
+                .frame(height: 60)
                 
-                BannerAdView(
-                             adUnitID: "ca-app-pub-7173006780619406~1224612011",
-                             adSize: largeAnchoredAdaptiveBanner(width: UIScreen.main.bounds.width)
-                         )
-                         .frame(height: 60)
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
