@@ -10,29 +10,29 @@ import ClapperboardCore
 
 @Observable
 class SettingsViewModel {
-    
-    var name: String = UserDefaults.shared.string(forKey: UserDefaults.Keys.name) ?? ""
-    
+
+    var name: String = UserDefaults.appGroup.string(
+        forKey: UserDefaults.Keys.name
+    ) ?? ""
+
     func save() {
-        UserDefaults.shared.set(name, forKey: UserDefaults.Keys.name)
+        UserDefaults.appGroup.set(name, forKey: UserDefaults.Keys.name)
     }
-    
+
     func resetValues() {
         name = ""
-        UserDefaults.shared.removeObject(forKey: UserDefaults.Keys.name)
-        
+        UserDefaults.appGroup.removeObject(forKey: UserDefaults.Keys.name)
+
         #if DEBUG
-        UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.hasSeenOnboarding)
-        #endif
+        UserDefaults.standard.removeObject(
+            forKey: UserDefaults.Keys.hasSeenOnboarding
+        )
+        #endif // DEBUG
     }
-    
+
     func setName(_ name: String) {
-        guard !name.isEmpty else {
-            print("Name is empty")
-            return
-        }
+        guard !name.isEmpty else { return }
         self.name = name
         save()
     }
-    
 }

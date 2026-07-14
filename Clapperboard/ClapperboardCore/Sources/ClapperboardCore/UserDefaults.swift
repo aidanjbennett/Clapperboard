@@ -7,12 +7,13 @@
 
 import Foundation
 
-@MainActor
-extension UserDefaults {
-    public static let shared = UserDefaults(suiteName: "group.com.aidanjbennett.clapperboard")!
-    
-    public enum Keys {
-       public static let name = "name"
-       public static let hasSeenOnboarding = "hasSeenOnboarding"
+public extension UserDefaults {
+    static var appGroup: UserDefaults {
+        UserDefaults(suiteName: "group.com.aidanjbennett.clapperboard")!
+    }
+
+    enum Keys {
+        public static let name = "name"
+        public static let hasSeenOnboarding = "hasSeenOnboarding"
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ClapperboardCore
 
 struct OnboardingView: View {
 
@@ -66,7 +67,10 @@ struct OnboardingView: View {
     private func finish() {
         settingsVM.setName(nameInput)
         
-        UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
+        UserDefaults.appGroup.set(
+            true,
+            forKey: UserDefaults.Keys.hasSeenOnboarding
+        )
     }
 }
 

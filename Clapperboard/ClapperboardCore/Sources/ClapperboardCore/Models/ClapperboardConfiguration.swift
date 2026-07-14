@@ -1,0 +1,62 @@
+//
+//  ClapperboardConfiguration.swift
+//  ClapperboardCore
+//
+//  Created by Aidan Bennett on 13/05/2026.
+//
+
+import Foundation
+
+public struct ClapperboardConfiguration {
+    
+    public var title: String
+    public var scene: String
+    public var take: String
+    public var director: String
+    public var selectedDate: Date = Date()
+
+    public var date: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        return formatter.string(from: selectedDate)
+    }
+    
+    // Default
+    public static var `default`: ClapperboardConfiguration {
+        let storedName = UserDefaults.appGroup.string(
+            forKey: UserDefaults.Keys.name
+        ) ?? "John Doe"
+
+        if #available(iOS 15, *) {
+            return ClapperboardConfiguration(
+                title: "My Scene",
+                scene: "1",
+                take: "1",
+                director: storedName,
+                selectedDate: .now
+            )
+        } else {
+            // Fallback on earlier versions
+            return ClapperboardConfiguration(
+                title: "My Scene",
+                scene: "1",
+                take: "1",
+                director: storedName,
+                selectedDate: Date()
+            )
+        }
+    }
+
+     public func toAdjustmentDataPayload() throws -> Data {
+        try JSONSerialization.data(withJSONObject: [
+            "title": title,
+            "scene": scene,
+            "take": take,
+            "director": director,
+            "date": date,
+            "selectedDate": selectedDate.timeIntervalSince1970
+        ])
+    }
+}
+
+
