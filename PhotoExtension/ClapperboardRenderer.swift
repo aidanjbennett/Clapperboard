@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Sentry
+import ClapperboardCore
 
 /// Responsible solely for drawing the clapperboard overlay `CGImage`.
 /// Has no knowledge of AVFoundation or Photos – pure UIKit/CoreGraphics.
@@ -35,39 +36,6 @@ struct ClapperboardRenderer {
         }
     }
 
-    // MARK: - Layout helpers
-
-    private struct Layout {
-        let isLandscape: Bool
-        let scale: CGFloat
-        let stripeHeight: CGFloat
-        let infoHeight: CGFloat
-        let overlayHeight: CGFloat
-        let verticalOffset: CGFloat
-        let sideInset: CGFloat
-        let overlayWidth: CGFloat
-        let titleFontSize: CGFloat
-        let bodyFontSize: CGFloat
-        let labelFontSize: CGFloat
-        let padding: CGFloat
-        let lineSpacing: CGFloat
-
-        init(size: CGSize) {
-            isLandscape  = size.width > size.height
-            scale        = (isLandscape ? size.height : size.width) / 1080.0
-            stripeHeight = 80.0 * scale
-            infoHeight   = isLandscape ? size.height * 0.45 : 400.0 * scale
-            overlayHeight = stripeHeight + infoHeight
-            verticalOffset = (size.height - overlayHeight) / 2
-            sideInset    = size.width * 0.05
-            overlayWidth = size.width - sideInset * 2
-            titleFontSize = (isLandscape ? 60.0 : 90.0) * scale
-            bodyFontSize  = (isLandscape ? 40.0 : 58.0) * scale
-            labelFontSize = bodyFontSize * 0.65
-            padding       = (isLandscape ? 18.0 : 28.0) * scale
-            lineSpacing   = (isLandscape ? 6.0 : 10.0) * scale
-        }
-    }
 
     // MARK: - Drawing
 
