@@ -20,7 +20,12 @@ class ClapperboardViewModel {
     var placeholderImage: UIImage?
     var isProcessing = false
 
-    var configuration: ClapperboardConfiguration = .default
+    var configuration: ClapperboardConfiguration
+
+    @MainActor
+    init() {
+        self.configuration = .default
+    }
 
     // Formatted date string for rendering on the clapperboard
     var formattedDate: String {

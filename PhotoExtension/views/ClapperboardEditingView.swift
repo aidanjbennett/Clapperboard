@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Photos
+import ClapperboardCore
 
 struct ClapperboardEditingView: View {
     @State private var viewModel = ClapperboardViewModel()
