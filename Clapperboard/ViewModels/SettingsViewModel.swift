@@ -6,15 +6,7 @@
 //
 
 import Foundation
-
-extension UserDefaults {
-    static let shared = UserDefaults(suiteName: "group.com.aidanjbennett.clapperboard")!
-    
-    enum Keys {
-        static let name = "name"
-        static let hasSeenOnboarding = "hasSeenOnboarding"
-    }
-}
+import ClapperboardCore
 
 @Observable
 class SettingsViewModel {
