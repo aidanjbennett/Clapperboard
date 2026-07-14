@@ -11,24 +11,35 @@ import AppTrackingTransparency
 struct ContentView: View {
     var body: some View {
         TabView {
+            
             NavigationStack {
                 HomeView()
             }
             .tabItem {
                 Label("Home", systemImage: "house")
             }
-
+            
+            NavigationStack {
+                AddClapperboardView()
+            }.tabItem {
+                Label("Add Clapperboard", systemImage: "video.badge.plus")
+            }
+            
             NavigationStack {
                 AboutView()
             }
             .tabItem {
                 Label("About", systemImage: "info.circle")
             }
+            
+          
+            
         }.onAppear {
             Task {
                 if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
                     let status = await ATTrackingManager.requestTrackingAuthorization()
-                                // optionally store/log status
+                    // optionally store/log status
+                        print(status)
                     }
                 }
         }
