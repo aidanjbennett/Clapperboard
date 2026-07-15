@@ -65,6 +65,7 @@ struct SettingsView: View {
 
                 Button {
                     // Purchase flow
+                    print("purchase flow")
                 } label: {
                     Label(
                         "Remove Ads",
@@ -74,6 +75,7 @@ struct SettingsView: View {
 
                 Button {
                     // Restore purchases
+                    print("restore purchases")
                 } label: {
                     Label(
                         "Restore Purchases",
@@ -87,6 +89,9 @@ struct SettingsView: View {
 
                 Button {
                     // Open App Store review
+                    
+                    
+                    
                 } label: {
                     Label(
                         "Rate Clapperboard",
@@ -118,9 +123,9 @@ struct SettingsView: View {
 
                 LabeledContent(
                     "Version",
-                    value: "1.0" // TODO: Fetch from the view model
+                    value: "\(viewModel.appVersion) (\(viewModel.buildNumber))"
                 )
-
+                
                 Link(
                     destination: URL(string: "https://aidanjbennett.com/clapperboard/privacy")!
                 ) {
@@ -130,14 +135,14 @@ struct SettingsView: View {
                     )
                 }
 
-//                Link(
-//                    destination: URL(string: "https://yourwebsite.com/terms")!
-//                ) {
-//                    Label(
-//                        "Terms of Use",
-//                        systemImage: "doc.text"
-//                    )
-//                }
+                Link(
+                    destination: URL(string: "https://aidanjbennett.com/clapperboard/terms")!
+                ) {
+                    Label(
+                        "Terms of Use",
+                        systemImage: "doc.text"
+                    )
+                }
             }
 
 

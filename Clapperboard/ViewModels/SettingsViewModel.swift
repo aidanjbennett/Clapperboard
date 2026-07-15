@@ -10,7 +10,15 @@ import ClapperboardCore
 
 @Observable
 final class SettingsViewModel {
-        
+    
+    var appVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
+    }
+    
+    var buildNumber: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
+    }
+    
     var name: String = UserDefaults.appGroup.string(
         forKey: UserDefaults.Keys.name
     ) ?? ""
