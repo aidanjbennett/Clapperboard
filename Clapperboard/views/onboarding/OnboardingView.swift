@@ -65,12 +65,17 @@ struct OnboardingView: View {
     }
 
     private func finish() {
+        
+        print("hasSeenOnboarding:", UserDefaults.appGroup.bool(forKey: UserDefaults.Keys.hasSeenOnboarding))
+        
         settingsVM.setName(nameInput)
         
         UserDefaults.appGroup.set(
             true,
             forKey: UserDefaults.Keys.hasSeenOnboarding
         )
+        
+        print("hasSeenOnboarding:", UserDefaults.appGroup.bool(forKey: UserDefaults.Keys.hasSeenOnboarding))
     }
 }
 

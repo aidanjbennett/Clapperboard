@@ -13,7 +13,18 @@ public extension UserDefaults {
     }
 
     enum Keys {
+        // Legacy
         public static let name = "name"
+        
+        // New stuff
+        public static let title = "title"
+        public static let scene = "scene"
+
+        public static let saveToPhotos = "saveToPhotos"
+        public static let keepOriginalAudio = "keepOriginalAudio"
+        public static let exportQuality = "exportQuality"
+        
+        // Onboarding
         public static let hasSeenOnboarding = "hasSeenOnboarding"
     }
 }
