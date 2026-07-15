@@ -26,9 +26,6 @@ final class BannerCoordinator: NSObject, BannerViewDelegate {
             print("Ad failed to load: \(error.localizedDescription)")
             self.onAdFailed?(error)
 
-            // "Invalid ad width or height" means the AdSize itself is broken,
-            // not a transient network/no-fill issue. Retrying will just repeat
-            // the same failure forever, so bail out immediately in that case.
             if error.localizedDescription.contains("Invalid ad width or height") {
                 print("Ad size is invalid, not retrying (this is a sizing bug, not a network issue)")
                 return
@@ -51,7 +48,6 @@ final class BannerCoordinator: NSObject, BannerViewDelegate {
             return
         }
         retryCount += 1
-        // Exponential backoff: 5s, 10s, 20s
         let delay = 5.0 * pow(2.0, Double(retryCount - 1))
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
             guard let self, let bannerView = self.bannerView else { return }
@@ -64,8 +60,6 @@ struct AdBannerView: UIViewRepresentable {
     let adUnitID: String
     let adSize: AdSize
 
-    /// Called on the main thread when the ad successfully loads or fails,
-    /// so the parent view can decide whether to reserve space for it.
     var onStateChange: ((Bool) -> Void)? = nil
 
     func makeCoordinator() -> BannerCoordinator {
@@ -90,22 +84,24 @@ struct AdBannerView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: BannerView, context: Context) {
-        // If the root VC wasn't available at creation time, try again here,
-        // since updateUIView is called again once SwiftUI re-evaluates the tree.
         if uiView.rootViewController == nil {
             attachRootViewController(to: uiView)
+            if uiView.rootViewController != nil {
+                loadAd(into: uiView)
+            }
         }
     }
 
     private func loadAd(into banner: BannerView) {
         attachRootViewController(to: banner)
 
-        // Defend against a zero/invalid size making it this far — the SDK
-        // will otherwise fail the load with "Invalid ad width or height"
-        // every single time, which is not a transient/network issue and
-        // will not be fixed by retrying.
         guard adSize.size.width > 0, adSize.size.height > 0 else {
             print("AdBannerView: refusing to load, adSize is invalid (\(adSize.size))")
+            return
+        }
+
+        guard banner.rootViewController != nil else {
+            print("AdBannerView: refusing to load, no root view controller yet")
             return
         }
 
@@ -123,18 +119,10 @@ struct AdBannerView: UIViewRepresentable {
     }
 }
 
-private enum LoadState {
-    case pending   // not yet attempted — reserve space so layout can happen
-    case loaded    // ad showing — keep the space
-    case failed    // gave up — collapse to nothing
-}
-
-/// Wrapper that collapses to zero height if the ad fails to load,
-/// so you never end up with dead blank space in a fixed-height List/VStack.
 struct CollapsibleAdBannerView: View {
     let adUnitID: String
-    
-    @State private var loadState: LoadState = .pending
+
+    @State private var loadState: AdLoadState = .pending
 
     private var reservesSpace: Bool {
         loadState != .failed
@@ -152,6 +140,7 @@ struct CollapsibleAdBannerView: View {
                     loadState = loaded ? .loaded : .failed
                 }
             } else {
+                Text("Ad failed to load")
                 Color.clear
             }
         }
@@ -160,5 +149,3 @@ struct CollapsibleAdBannerView: View {
         .animation(.easeInOut(duration: 0.2), value: loadState == .failed)
     }
 }
-
-extension LoadState: Equatable {}
