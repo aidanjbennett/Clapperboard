@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ClapperboardConfiguration {
+public struct ClapperboardConfiguration : Equatable {
     
     public var title: String
     public var scene: String
