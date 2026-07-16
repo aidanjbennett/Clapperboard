@@ -10,7 +10,6 @@ import AVFoundation
 import CoreImage
 import Sentry
 
-@available(iOS 15, *)
 public struct VideoCompositor: Sendable {
 
     public init() {}

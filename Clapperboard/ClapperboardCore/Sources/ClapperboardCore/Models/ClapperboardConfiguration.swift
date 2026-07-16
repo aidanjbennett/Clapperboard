@@ -28,24 +28,13 @@ public struct ClapperboardConfiguration : Equatable {
             forKey: UserDefaults.Keys.name
         ) ?? "John Doe"
         
-        if #available(iOS 15, *) {
-            return ClapperboardConfiguration(
+        return ClapperboardConfiguration(
                 title: "My Scene",
                 scene: "1",
                 take: "1",
                 director: storedName,
                 selectedDate: .now
-            )
-        } else {
-            // Fallback on earlier versions
-            return ClapperboardConfiguration(
-                title: "My Scene",
-                scene: "1",
-                take: "1",
-                director: storedName,
-                selectedDate: Date()
-            )
-        }
+        )
     }
 
      public func toAdjustmentDataPayload() throws -> Data {

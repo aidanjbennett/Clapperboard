@@ -18,7 +18,6 @@ public struct ClapperboardRenderer {
      }
     
     @MainActor
-    @available(iOS 13.0.0, *)
     public func render(size: CGSize) -> CGImage {
         let renderer = UIGraphicsImageRenderer(size: size)
 

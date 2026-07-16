@@ -8,7 +8,6 @@
 import AVFoundation
 import Foundation
 
-@available(iOS 15.0, *)
 public enum VideoUtilities {
 
     public static func videoSize(for url: URL) async -> CGSize {
