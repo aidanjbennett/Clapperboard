@@ -48,7 +48,7 @@ struct HomeView: View {
                 }
                 
                 Section {
-                    Text("Select videos in your library, then open Clapperboard to perform quick actions.")
+                    Text("Go to Add Clapperboard and select a video and fill in your details and click export. Or use our photo extention by selecting videos in your library, then open Clapperboard Pro to perform quick actions.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .padding(.vertical, 4)
