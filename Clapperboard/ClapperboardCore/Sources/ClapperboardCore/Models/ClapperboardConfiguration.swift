@@ -23,10 +23,11 @@ public struct ClapperboardConfiguration : Equatable {
     
     // Default
     public static var `default`: ClapperboardConfiguration {
+        
         let storedName = UserDefaults.appGroup.string(
             forKey: UserDefaults.Keys.name
         ) ?? "John Doe"
-
+        
         if #available(iOS 15, *) {
             return ClapperboardConfiguration(
                 title: "My Scene",
