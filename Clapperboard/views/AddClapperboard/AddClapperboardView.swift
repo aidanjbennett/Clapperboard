@@ -51,16 +51,6 @@ struct AddClapperboardView: View {
         .background(Color(.systemGroupedBackground))
         .navigationTitle("New Clapperboard")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    SettingsView()
-                } label: {
-                    Image(systemName: "gearshape")
-                }
-                .accessibilityLabel("Settings")
-            }
-        }
         .task(id: viewModel.selectedItem) {
             await viewModel.loadSelectedVideo()
 

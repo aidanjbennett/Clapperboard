@@ -60,11 +60,21 @@ struct HomeView: View {
                 
             }
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
+                ToolbarItem(placement: .primaryAction) {
                     Button("Save") {
                         nameIsFocused = false
                         viewModel.save()
                     }
+                }
+                
+                ToolbarItem(placement: .secondaryAction) {
+                    NavigationLink {
+                        SettingsView()
+                    } label: {
+                        Text("More Settings")
+                        Image(systemName: "gearshape")
+                    }
+                    .accessibilityLabel("More Settings")
                 }
             }
             .navigationTitle("Home")
