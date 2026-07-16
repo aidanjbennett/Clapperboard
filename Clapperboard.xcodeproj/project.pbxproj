@@ -68,6 +68,7 @@
 		DDC0A9912FCAD30E00C6493C /* Exceptions for "Clapperboard" folder in "Clapperboard" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				ClapperboardCore,
 				Info.plist,
 			);
 			target = DDA0549A2E9F9923005CE771 /* Clapperboard */;
