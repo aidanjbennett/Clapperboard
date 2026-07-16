@@ -94,6 +94,22 @@ class AddClapperboardViewModel {
     }
 
     func dismissShareSheet() {
+        if let url = exportedVideoURL {
+             try? FileManager.default.removeItem(at: url)
+         }
+        
         exportedVideoURL = nil
+    }
+    
+    func changeVideo() {
+        if let currentURL = selectedVideoURL {
+              try? FileManager.default.removeItem(at: currentURL)
+        }
+
+        selectedItem = nil
+        selectedVideoURL = nil
+        previewImage = nil
+        exportedVideoURL = nil
+        error = nil
     }
 }

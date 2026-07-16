@@ -15,19 +15,14 @@ struct ChangeVideoButtonView: View {
     var body: some View {
         Button {
             focusedField.wrappedValue = nil
-            Task {
-                await viewModel.export()
-            }
+            viewModel.changeVideo()
         } label: {
-            HStack {
-                Label("Change Video", systemImage: "square.and.arrow.up")
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 4)
+                Label("Change Video", systemImage: "arrow.triangle.2.circlepath")
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 4)
         }
         .buttonStyle(.borderedProminent)
         .controlSize(.regular)
-        .disabled(!viewModel.canExport)
-        .animation(.easeInOut(duration: 0.2), value: viewModel.isExporting)
+        .disabled(viewModel.isExporting || viewModel.selectedItem == nil)
     }
 }
