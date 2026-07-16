@@ -1,13 +1,13 @@
 //
-//  ExportButtonView.swift
+//  ChangeVideoButtonView.swift
 //  Clapperboard
 //
-//  Created by Aidan Bennett on 15/07/2026.
+//  Created by Aidan Bennett on 16/07/2026.
 //
 
 import SwiftUI
 
-struct ExportButtonView: View {
+struct ChangeVideoButtonView: View {
     
     var focusedField: FocusState<ClapperboardField?>.Binding
     @Binding var viewModel: AddClapperboardViewModel
@@ -20,12 +20,7 @@ struct ExportButtonView: View {
             }
         } label: {
             HStack {
-                if viewModel.isExporting {
-                    ProgressView()
-                        .tint(.white)
-                } else {
-                    Label("Export Video", systemImage: "square.and.arrow.up")
-                }
+                Label("Change Video", systemImage: "square.and.arrow.up")
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 4)

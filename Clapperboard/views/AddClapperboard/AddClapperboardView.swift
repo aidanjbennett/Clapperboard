@@ -31,12 +31,18 @@ struct AddClapperboardView: View {
                     configuration: $viewModel.configuration,
                     focusedField: $focusedField
                 )
-
-                ExportButtonView(
-                    focusedField: $focusedField,
-                    viewModel: $viewModel
-                )
-                .padding(.top, 30)
+                
+                HStack {
+                    ChangeVideoButtonView(
+                        focusedField: $focusedField,
+                        viewModel: $viewModel
+                    )
+        
+                    ExportButtonView(
+                        focusedField: $focusedField,
+                        viewModel: $viewModel
+                    )
+                }
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)
