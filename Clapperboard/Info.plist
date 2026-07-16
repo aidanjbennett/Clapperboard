@@ -2,14 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>We save edited images to your photo library.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We use your photos so you can attach Clapperboards to your images</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>This identifier will be used to deliver ads that are more relevant to you.</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-7173006780619406~1224612011</string>
 	<key>SKAdNetworkItems</key>
