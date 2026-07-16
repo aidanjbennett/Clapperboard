@@ -25,21 +25,13 @@ struct ContentView: View {
                 Label("Add Clapperboard", systemImage: "video.badge.plus")
             }
             
-            NavigationStack {
-                AboutView()
-            }
-            .tabItem {
-                Label("About", systemImage: "info.circle")
-            }
-            
-          
-            
         }.onAppear {
             Task {
                 if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
                     let status = await ATTrackingManager.requestTrackingAuthorization()
                     // optionally store/log status
-                        print(status)
+                    print("Add tracking authorization: \(status)")
+                    
                     }
                 }
         }
