@@ -7,6 +7,7 @@
 
 import Foundation
 import ClapperboardCore
+import UIKit
 
 @Observable
 final class SettingsViewModel {
@@ -19,78 +20,132 @@ final class SettingsViewModel {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
     }
     
-    var name: String = UserDefaults.appGroup.string(
-        forKey: UserDefaults.Keys.name
+    var name: String = Foundation.UserDefaults.appGroup.string(
+        forKey: Foundation.UserDefaults.Keys.name
     ) ?? ""
 
-    var title: String = UserDefaults.appGroup.string(
-        forKey: UserDefaults.Keys.title
-    ) ?? ""
-
-    var scene: String = UserDefaults.appGroup.string(
-        forKey: UserDefaults.Keys.scene
-    ) ?? ""
+//    var title: String = Foundation.UserDefaults.appGroup.string(
+//        forKey: Foundation.UserDefaults.Keys.title
+//    ) ?? ""
+//
+//    var sceneAutoincrement: Bool = Foundation.UserDefaults.appGroup.bool(
+//        forKey: Foundation.UserDefaults.Keys.sceneAutoincrement
+//    ) as Bool ?? true
+//    
+//    var currentSceneNumber: Int = Foundation.UserDefaults.appGroup.integer(
+//        forKey: Foundation.UserDefaults.Keys.currentSceneNumber
+//    )
     
-    var appearance: AppearanceMode = .system
+    var appearance: AppearanceMode {
+         didSet {
+             Foundation.UserDefaults.appGroup.set(appearance.rawValue, forKey: Foundation.UserDefaults.Keys.appearanceMode)
+         }
+     }
 
-    // MARK: - Export
+//    var saveToPhotos: Bool = Foundation.UserDefaults.appGroup.object(
+//        forKey: Foundation.UserDefaults.Keys.saveToPhotos
+//    ) as? Bool ?? true
 
-    var saveToPhotos: Bool = UserDefaults.appGroup.object(
-        forKey: UserDefaults.Keys.saveToPhotos
-    ) as? Bool ?? true
-
-
-    // MARK: - Persistence
-
-    func save() {
-        UserDefaults.appGroup.set(
-            name,
-            forKey: UserDefaults.Keys.name
-        )
-
-        UserDefaults.appGroup.set(
-            title,
-            forKey: UserDefaults.Keys.title
-        )
-
-        UserDefaults.appGroup.set(
-            scene,
-            forKey: UserDefaults.Keys.scene
-        )
-
-        UserDefaults.appGroup.set(
-            saveToPhotos,
-            forKey: UserDefaults.Keys.saveToPhotos
-        )
+    init() {
+        let storedAppearanceMode = Foundation.UserDefaults.appGroup.string(forKey: Foundation.UserDefaults.Keys.appearanceMode) ?? AppearanceMode.system.rawValue
+           appearance = AppearanceMode(rawValue: storedAppearanceMode) ?? .system
     }
+    
+    func save() {
+        Foundation.UserDefaults.appGroup.set(
+            name,
+            forKey: Foundation.UserDefaults.Keys.name
+        )
+        
+        Foundation.UserDefaults.appGroup.set(
+            appearance.rawValue,
+            forKey: Foundation.UserDefaults.Keys.appearanceMode
+        )
+        
+//        Foundation.UserDefaults.appGroup.set(
+//            sceneAutoincrement,
+//            forKey: Foundation.UserDefaults.Keys.sceneAutoincrement
+//        )
+        
+      
 
+//        Foundation.UserDefaults.appGroup.set(
+//            title,
+//            forKey: Foundation.UserDefaults.Keys.title
+//        )
+//
+//        Foundation.UserDefaults.appGroup.set(
+//            saveToPhotos,
+//            forKey: Foundation.UserDefaults.Keys.saveToPhotos
+//        )
+    }
+    
+    func sendFeedback() {
+        let subject = "Clapperboard Feedback"
+        let body = """
+
+
+
+        ---
+        App Version: \(appVersion)
+        Build: \(buildNumber)
+        iOS: \(UIDevice.current.systemVersion)
+        Device: \(UIDevice.current.model)
+        """
+
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = "aidanbennett3@icloud.com"
+        components.queryItems = [
+            URLQueryItem(name: "subject", value: subject),
+            URLQueryItem(name: "body", value: body)
+        ]
+
+        guard let url = components.url else { return }
+
+        UIApplication.shared.open(url)
+    }
+    
+//    func resetCurrentSceneNumber() {
+//        currentSceneNumber = 1
+//      
+//        Foundation.UserDefaults.appGroup.set(
+//            currentSceneNumber,
+//            forKey: Foundation.UserDefaults.Keys.currentSceneNumber
+//        )
+//    }
 
     func resetValues() {
         name = ""
-        title = ""
-        scene = ""
-        saveToPhotos = true
+        // title = ""
+        
+        // sceneAutoincrement = false
+        // saveToPhotos = true
+        
+        appearance = .system
+        
+        Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.appearanceMode)
 
-        UserDefaults.appGroup.removeObject(
-            forKey: UserDefaults.Keys.name
+        Foundation.UserDefaults.appGroup.removeObject(
+            forKey: Foundation.UserDefaults.Keys.name
         )
 
-        UserDefaults.appGroup.removeObject(
-            forKey: UserDefaults.Keys.title
-        )
-
-        UserDefaults.appGroup.removeObject(
-            forKey: UserDefaults.Keys.scene
-        )
-
-        UserDefaults.appGroup.removeObject(
-            forKey: UserDefaults.Keys.saveToPhotos
-        )
-
+//        Foundation.UserDefaults.appGroup.removeObject(
+//            forKey: Foundation.UserDefaults.Keys.title
+//        )
+//
+//        Foundation.UserDefaults.appGroup.removeObject(
+//            forKey: Foundation.UserDefaults.Keys.sceneAutoincrement
+//        )
+//        
+//        Foundation.UserDefaults.appGroup.removeObject(
+//            forKey: Foundation.UserDefaults.Keys.saveToPhotos
+//        )
+        
         #if DEBUG
-        UserDefaults.appGroup.removeObject(
-            forKey: UserDefaults.Keys.hasSeenOnboarding
-        )
+//        Foundation.UserDefaults.appGroup.removeObject(
+//            forKey: Foundation.UserDefaults.Keys.hasSeenOnboarding
+//        )
         #endif
     }
 
@@ -99,28 +154,12 @@ final class SettingsViewModel {
 
         self.name = name
 
-        UserDefaults.appGroup.set(
+        Foundation.UserDefaults.appGroup.set(
             name,
-            forKey: UserDefaults.Keys.name
+            forKey: Foundation.UserDefaults.Keys.name
         )
         
         print("saved name: \(name)")
     }
-}
-
-enum ExportQuality: String, CaseIterable, Identifiable {
-    case hd = "720p"
-    case fullHD = "1080p"
-    case ultraHD = "4K"
-
-    var id: String { rawValue }
-}
-
-enum AppearanceMode: String, CaseIterable, Identifiable {
-    case system = "System"
-    case light = "Light"
-    case dark = "Dark"
-
-    var id: String { rawValue }
 }
 

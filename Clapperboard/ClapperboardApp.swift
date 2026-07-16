@@ -8,9 +8,18 @@
 import SwiftUI
 import Sentry
 import GoogleMobileAds
+import ClapperboardCore
 
 @main
 struct ClapperboardApp: App {
+    
+    @AppStorage(UserDefaults.Keys.appearanceMode, store: UserDefaults.appGroup)
+    private var appearanceModeRaw: String = AppearanceMode.system.rawValue
+    
+    private var appearanceMode: AppearanceMode {
+        AppearanceMode(rawValue: appearanceModeRaw) ?? .system
+    }
+    
     init() {
         SentrySDK.start { options in
             options.dsn = "https://0e62762dba491e3da941388f48e6a958@o4509298667094016.ingest.de.sentry.io/4511089404608592"
@@ -54,6 +63,7 @@ struct ClapperboardApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .preferredColorScheme(appearanceMode.colorScheme)
         }
     }
 }

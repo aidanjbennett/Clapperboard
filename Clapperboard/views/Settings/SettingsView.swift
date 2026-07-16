@@ -13,40 +13,45 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
-
+            
             Section("Clapperboard Defaults") {
-
-                TextField(
-                    "Director",
-                    text: $viewModel.name
-                )
-
-                TextField(
-                    "Scene",
-                    text: $viewModel.scene
-                )
+                
+                HStack {
+                    Image(systemName: "person.crop.circle")
+                        .foregroundStyle(.secondary)
+                    
+                    TextField(
+                        "Default Director name",
+                        text: $viewModel.name
+                    )
+                }
+                
+//                                Toggle(
+//                                    "Auto Increment Scene Number",
+//                                    isOn: $viewModel.sceneAutoincrement
+//                                )
+//                                
+//                                Button {
+//                                    viewModel.resetCurrentSceneNumber()
+//                                } label: {
+//                                    Label(
+//                                        "Reset Scene Count",
+//                                        systemImage: "trash"
+//                                    )
+//                                }
+                
+                
             }
-
-
-            Section("Export") {
-
-                Toggle(
-                    "Save to Photos",
-                    isOn: $viewModel.saveToPhotos
-                )
-
-//                Picker(
-//                    "Quality",
-//                    selection: $viewModel.exportQuality
-//                ) {
-//                    ForEach(ExportQuality.allCases) { quality in
-//                        Text(quality.rawValue)
-//                            .tag(quality)
-//                    }
-//                }
-            }
-
-
+            
+            
+//            Section("Export") {
+//                
+//                Toggle(
+//                    "Save to Photos",
+//                    isOn: $viewModel.saveToPhotos
+//                )
+//                
+//            }
             Section("Appearance") {
 
                 Picker(
@@ -61,38 +66,35 @@ struct SettingsView: View {
             }
 
 
-            Section("Premium") {
-
-                Button {
-                    // Purchase flow
-                    print("purchase flow")
-                } label: {
-                    Label(
-                        "Remove Ads",
-                        systemImage: "rectangle.slash"
-                    )
-                }
-
-                Button {
-                    // Restore purchases
-                    print("restore purchases")
-                } label: {
-                    Label(
-                        "Restore Purchases",
-                        systemImage: "arrow.clockwise"
-                    )
-                }
-            }
+//            Section("Premium") {
+//
+//                Button {
+//                    // Purchase flow
+//                    print("purchase flow")
+//                } label: {
+//                    Label(
+//                        "Remove Ads",
+//                        systemImage: "rectangle.slash"
+//                    )
+//                }
+//
+//                Button {
+//                    // Restore purchases
+//                    print("restore purchases")
+//                } label: {
+//                    Label(
+//                        "Restore Purchases",
+//                        systemImage: "arrow.clockwise"
+//                    )
+//                }
+//            }
 
 
             Section("Support") {
 
-                Button {
-                    // Open App Store review
-                    
-                    
-                    
-                } label: {
+                Link(
+                    destination: URL(string: "https://apps.apple.com/app/id6759068299?action=write-review")!
+                ) {
                     Label(
                         "Rate Clapperboard",
                         systemImage: "star"
@@ -100,7 +102,7 @@ struct SettingsView: View {
                 }
 
                 Button {
-                    // Open feedback email
+                    viewModel.sendFeedback()
                 } label: {
                     Label(
                         "Send Feedback",
@@ -108,14 +110,14 @@ struct SettingsView: View {
                     )
                 }
 
-                Button {
-                    // Feature request
-                } label: {
-                    Label(
-                        "Request Feature",
-                        systemImage: "lightbulb"
-                    )
-                }
+//                Button {
+//                    // Feature request
+//                } label: {
+//                    Label(
+//                        "Request Feature",
+//                        systemImage: "lightbulb"
+//                    )
+//                }
             }
 
 

@@ -17,12 +17,16 @@ public extension UserDefaults {
         public static let name = "name"
         
         // New stuff
-        public static let title = "title"
-        public static let scene = "scene"
+        public static let appearanceMode = "appearanceMode"
 
-        public static let saveToPhotos = "saveToPhotos"
-        public static let keepOriginalAudio = "keepOriginalAudio"
-        public static let exportQuality = "exportQuality"
+// TODO: Implement below
+//        public static let title = "title"
+//        public static let sceneAutoincrement = "sceneAutoincrement"
+//        public static let currentSceneNumber = "currentSceneNumber"
+//        
+//        public static let saveToPhotos = "saveToPhotos"
+//        public static let keepOriginalAudio = "keepOriginalAudio"
+//        public static let exportQuality = "exportQuality"
         
         // Onboarding
         public static let hasSeenOnboarding = "hasSeenOnboarding"
