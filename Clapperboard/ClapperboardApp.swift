@@ -21,6 +21,11 @@ struct ClapperboardApp: App {
     }
     
     init() {
+        
+        MobileAds.shared.requestConfiguration.testDeviceIdentifiers = [
+            "5AF1DB3B-AA9A-439D-8C60-D66304E7E725"
+        ]
+        
         SentrySDK.start { options in
             options.dsn = "https://0e62762dba491e3da941388f48e6a958@o4509298667094016.ingest.de.sentry.io/4511089404608592"
             

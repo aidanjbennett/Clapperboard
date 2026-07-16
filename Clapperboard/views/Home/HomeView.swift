@@ -54,7 +54,7 @@ struct HomeView: View {
                         .padding(.vertical, 4)
                 }
                 CollapsibleAdBannerView(
-                    adUnitID: "ca-app-pub-7173006780619406/4564292462"
+                    adUnitID: AdUnitID.homeBanner
                 )
                 .frame(height: 60)
                 

@@ -18,7 +18,7 @@ struct AddClapperboardView: View {
         ScrollView {
             VStack(spacing: 28) {
                 CollapsibleAdBannerView(
-                    adUnitID: "ca-app-pub-7173006780619406/2346956143"
+                    adUnitID: AdUnitID.addClapperboardBanner
                 )
                 .frame(height: 60)
 
