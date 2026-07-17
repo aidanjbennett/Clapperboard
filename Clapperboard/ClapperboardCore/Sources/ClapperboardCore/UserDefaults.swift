@@ -18,9 +18,9 @@ public extension UserDefaults {
         
         // New stuff
         public static let appearanceMode = "appearanceMode"
+        public static let title = "sceneTitle"
 
 // TODO: Implement below
-//        public static let title = "title"
 //        public static let sceneAutoincrement = "sceneAutoincrement"
 //        public static let currentSceneNumber = "currentSceneNumber"
 //        

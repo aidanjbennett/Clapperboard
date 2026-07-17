@@ -51,6 +51,12 @@ struct AddClapperboardView: View {
         .background(Color(.systemGroupedBackground))
         .navigationTitle("New Clapperboard")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            viewModel.refreshDefaultsIfNeeded()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { _ in
+            viewModel.refreshDefaultsIfNeeded()
+        }
         .task(id: viewModel.selectedItem) {
             await viewModel.loadSelectedVideo()
 

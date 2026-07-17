@@ -18,7 +18,16 @@ class AddClapperboardViewModel {
     var selectedVideoURL: URL?
 
     var configuration: ClapperboardConfiguration = .default
-
+    
+    private var lastAppliedDefaultTitle: String
+    private var lastAppliedDefaultDirector: String
+    
+    init() {
+        let defaults = ClapperboardConfiguration.default
+        lastAppliedDefaultTitle = defaults.title
+        lastAppliedDefaultDirector = defaults.director
+    }
+    
     var previewImage: UIImage?
     var isRendering = false
     var isExporting = false
@@ -112,4 +121,18 @@ class AddClapperboardViewModel {
         exportedVideoURL = nil
         error = nil
     }
+    
+    func refreshDefaultsIfNeeded() {
+         let currentDefault = ClapperboardConfiguration.default
+
+         if configuration.title == lastAppliedDefaultTitle {
+             configuration.title = currentDefault.title
+             lastAppliedDefaultTitle = currentDefault.title
+         }
+
+         if configuration.director == lastAppliedDefaultDirector {
+             configuration.director = currentDefault.director
+             lastAppliedDefaultDirector = currentDefault.director
+         }
+     }
 }

@@ -28,8 +28,12 @@ public struct ClapperboardConfiguration : Equatable {
             forKey: UserDefaults.Keys.name
         ) ?? "John Doe"
         
+        let storedSceneTitle = UserDefaults.appGroup.string(
+            forKey: UserDefaults.Keys.title
+        ) ?? "My Scene"
+        
         return ClapperboardConfiguration(
-                title: "My Scene",
+                title: storedSceneTitle,
                 scene: "1",
                 take: "1",
                 director: storedName,

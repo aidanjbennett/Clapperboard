@@ -24,10 +24,10 @@ final class SettingsViewModel {
         forKey: Foundation.UserDefaults.Keys.name
     ) ?? ""
 
-//    var title: String = Foundation.UserDefaults.appGroup.string(
-//        forKey: Foundation.UserDefaults.Keys.title
-//    ) ?? ""
-//
+    var title: String = Foundation.UserDefaults.appGroup.string(
+        forKey: Foundation.UserDefaults.Keys.title
+    ) ?? ""
+
 //    var sceneAutoincrement: Bool = Foundation.UserDefaults.appGroup.bool(
 //        forKey: Foundation.UserDefaults.Keys.sceneAutoincrement
 //    ) as Bool ?? true
@@ -62,17 +62,16 @@ final class SettingsViewModel {
             forKey: Foundation.UserDefaults.Keys.appearanceMode
         )
         
+        Foundation.UserDefaults.appGroup.set(
+            title,
+            forKey: Foundation.UserDefaults.Keys.title
+        )
+        
 //        Foundation.UserDefaults.appGroup.set(
 //            sceneAutoincrement,
 //            forKey: Foundation.UserDefaults.Keys.sceneAutoincrement
 //        )
         
-      
-
-//        Foundation.UserDefaults.appGroup.set(
-//            title,
-//            forKey: Foundation.UserDefaults.Keys.title
-//        )
 //
 //        Foundation.UserDefaults.appGroup.set(
 //            saveToPhotos,
@@ -117,7 +116,7 @@ final class SettingsViewModel {
 
     func resetValues() {
         name = ""
-        // title = ""
+        title = ""
         
         // sceneAutoincrement = false
         // saveToPhotos = true
@@ -128,22 +127,14 @@ final class SettingsViewModel {
 
         Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.name)
         
+        Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.title)
+//
+//        Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.sceneAutoincrement)
+//        
+//        Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.saveToPhotos)
+        
         // Remove old not used onboarding object
         Foundation.UserDefaults.appGroup.removeObject( forKey: Foundation.UserDefaults.Keys.hasSeenOnboarding)
-    
-        
-//        Foundation.UserDefaults.appGroup.removeObject(
-//            forKey: Foundation.UserDefaults.Keys.title
-//        )
-//
-//        Foundation.UserDefaults.appGroup.removeObject(
-//            forKey: Foundation.UserDefaults.Keys.sceneAutoincrement
-//        )
-//        
-//        Foundation.UserDefaults.appGroup.removeObject(
-//            forKey: Foundation.UserDefaults.Keys.saveToPhotos
-//        )
-        
     }
 
     func setName(_ name: String) {
@@ -155,8 +146,6 @@ final class SettingsViewModel {
             name,
             forKey: Foundation.UserDefaults.Keys.name
         )
-        
-        print("saved name: \(name)")
     }
 }
 

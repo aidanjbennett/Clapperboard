@@ -26,6 +26,16 @@ struct SettingsView: View {
                     )
                 }
                 
+                HStack {
+                    Image(systemName: "doc.text")
+                        .foregroundStyle(.secondary)
+                    
+                    TextField(
+                        "Default Title / Scene name",
+                        text: $viewModel.title
+                    )
+                }
+                
 //                                Toggle(
 //                                    "Auto Increment Scene Number",
 //                                    isOn: $viewModel.sceneAutoincrement
