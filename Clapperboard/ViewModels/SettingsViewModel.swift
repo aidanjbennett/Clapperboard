@@ -126,10 +126,12 @@ final class SettingsViewModel {
         
         Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.appearanceMode)
 
-        Foundation.UserDefaults.appGroup.removeObject(
-            forKey: Foundation.UserDefaults.Keys.name
-        )
-
+        Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.name)
+        
+        // Remove old not used onboarding object
+        Foundation.UserDefaults.appGroup.removeObject( forKey: Foundation.UserDefaults.Keys.hasSeenOnboarding)
+    
+        
 //        Foundation.UserDefaults.appGroup.removeObject(
 //            forKey: Foundation.UserDefaults.Keys.title
 //        )
@@ -142,11 +144,6 @@ final class SettingsViewModel {
 //            forKey: Foundation.UserDefaults.Keys.saveToPhotos
 //        )
         
-        #if DEBUG
-//        Foundation.UserDefaults.appGroup.removeObject(
-//            forKey: Foundation.UserDefaults.Keys.hasSeenOnboarding
-//        )
-        #endif
     }
 
     func setName(_ name: String) {
