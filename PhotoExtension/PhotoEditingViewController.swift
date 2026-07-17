@@ -9,7 +9,6 @@ class PhotoEditingViewController: UIViewController, PHContentEditingController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Clapperboard Extension loaded!")
         
         // Create the SwiftUI view
         clapperboardEditingView = ClapperboardEditingView()
