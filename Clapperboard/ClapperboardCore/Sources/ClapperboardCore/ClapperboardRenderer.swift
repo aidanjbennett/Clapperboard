@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import Sentry
 
 public struct ClapperboardRenderer {
     
@@ -26,7 +25,6 @@ public struct ClapperboardRenderer {
         }
 
         guard let cgImage = image.cgImage else {
-            SentrySDK.capture(error: VideoProcessingError.clapperboardRenderFailed)
 
             let fallback = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1))
                 .image { _ in }

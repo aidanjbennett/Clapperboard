@@ -8,7 +8,6 @@
 import Foundation
 import AVFoundation
 import CoreImage
-import Sentry
 
 public struct VideoCompositor: Sendable {
 
@@ -60,7 +59,6 @@ public struct VideoCompositor: Sendable {
                 at: .zero
             )
         } catch {
-            SentrySDK.capture(error: error)
             throw error
         }
 
@@ -192,7 +190,7 @@ public struct VideoCompositor: Sendable {
         do {
             try await exportSession.export(to: outputURL, as: .mov)
         } catch {
-            SentrySDK.capture(error: error)
+           // SentrySDK.capture(error: error)
             throw error
         }
     }
@@ -202,7 +200,7 @@ public struct VideoCompositor: Sendable {
         do {
             try FileManager.default.removeItem(at: url)
         } catch {
-            SentrySDK.capture(error: error)
+           // SentrySDK.capture(error: error)
             throw error
         }
     }
