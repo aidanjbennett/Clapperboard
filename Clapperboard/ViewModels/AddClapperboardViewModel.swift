@@ -21,11 +21,13 @@ class AddClapperboardViewModel {
     
     private var lastAppliedDefaultTitle: String
     private var lastAppliedDefaultDirector: String
+    private var lastAppliedCurrentSceneNumber: String
     
     init() {
         let defaults = ClapperboardConfiguration.default
         lastAppliedDefaultTitle = defaults.title
         lastAppliedDefaultDirector = defaults.director
+        lastAppliedCurrentSceneNumber = defaults.scene
     }
     
     var previewImage: UIImage?
@@ -134,5 +136,10 @@ class AddClapperboardViewModel {
              configuration.director = currentDefault.director
              lastAppliedDefaultDirector = currentDefault.director
          }
+        
+        if configuration.scene == lastAppliedCurrentSceneNumber {
+            configuration.scene = currentDefault.scene
+            lastAppliedCurrentSceneNumber = currentDefault.scene
+        }
      }
 }

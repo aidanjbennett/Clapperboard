@@ -28,13 +28,13 @@ final class SettingsViewModel {
         forKey: Foundation.UserDefaults.Keys.title
     ) ?? ""
 
-//    var sceneAutoincrement: Bool = Foundation.UserDefaults.appGroup.bool(
-//        forKey: Foundation.UserDefaults.Keys.sceneAutoincrement
-//    ) as Bool ?? true
-//    
-//    var currentSceneNumber: Int = Foundation.UserDefaults.appGroup.integer(
-//        forKey: Foundation.UserDefaults.Keys.currentSceneNumber
-//    )
+    var sceneAutoincrement: Bool = Foundation.UserDefaults.appGroup.bool(
+        forKey: Foundation.UserDefaults.Keys.sceneAutoincrement
+    )
+    
+    var currentSceneNumber: Int = Foundation.UserDefaults.appGroup.integer(
+        forKey: Foundation.UserDefaults.Keys.currentSceneNumber
+    )
     
     var appearance: AppearanceMode {
          didSet {
@@ -67,12 +67,17 @@ final class SettingsViewModel {
             forKey: Foundation.UserDefaults.Keys.title
         )
         
-//        Foundation.UserDefaults.appGroup.set(
-//            sceneAutoincrement,
-//            forKey: Foundation.UserDefaults.Keys.sceneAutoincrement
-//        )
+        Foundation.UserDefaults.appGroup.set(
+            sceneAutoincrement,
+            forKey: Foundation.UserDefaults.Keys.sceneAutoincrement
+        )
         
-//
+        Foundation.UserDefaults.appGroup.set(
+            1,
+            forKey: Foundation.UserDefaults.Keys.currentSceneNumber
+        )
+        
+
 //        Foundation.UserDefaults.appGroup.set(
 //            saveToPhotos,
 //            forKey: Foundation.UserDefaults.Keys.saveToPhotos
@@ -105,20 +110,21 @@ final class SettingsViewModel {
         UIApplication.shared.open(url)
     }
     
-//    func resetCurrentSceneNumber() {
-//        currentSceneNumber = 1
-//      
-//        Foundation.UserDefaults.appGroup.set(
-//            currentSceneNumber,
-//            forKey: Foundation.UserDefaults.Keys.currentSceneNumber
-//        )
-//    }
+    func resetCurrentSceneNumber() {
+        currentSceneNumber = 1
+      
+        Foundation.UserDefaults.appGroup.set(
+            currentSceneNumber,
+            forKey: Foundation.UserDefaults.Keys.currentSceneNumber
+        )
+    }
 
     func resetValues() {
         name = ""
         title = ""
         
-        // sceneAutoincrement = false
+        sceneAutoincrement = false
+        currentSceneNumber = 1
         // saveToPhotos = true
         
         appearance = .system
@@ -128,10 +134,12 @@ final class SettingsViewModel {
         Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.name)
         
         Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.title)
-//
-//        Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.sceneAutoincrement)
-//        
-//        Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.saveToPhotos)
+
+        Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.sceneAutoincrement)
+        
+        Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.currentSceneNumber)
+        
+        // Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.saveToPhotos)
         
         // Remove old not used onboarding object
         Foundation.UserDefaults.appGroup.removeObject( forKey: Foundation.UserDefaults.Keys.hasSeenOnboarding)

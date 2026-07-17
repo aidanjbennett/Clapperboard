@@ -131,8 +131,14 @@ struct ClapperboardEditingView: View {
         }
 
         exportTask = task
+        
+        let output = await task.value
 
-        return await task.value
+        if output != nil {
+            autoIncrementSceneNumber()
+        }
+        
+        return output
     }
 
     func exportVideo(

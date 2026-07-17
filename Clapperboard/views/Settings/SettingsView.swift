@@ -36,19 +36,19 @@ struct SettingsView: View {
                     )
                 }
                 
-//                                Toggle(
-//                                    "Auto Increment Scene Number",
-//                                    isOn: $viewModel.sceneAutoincrement
-//                                )
-//                                
-//                                Button {
-//                                    viewModel.resetCurrentSceneNumber()
-//                                } label: {
-//                                    Label(
-//                                        "Reset Scene Count",
-//                                        systemImage: "trash"
-//                                    )
-//                                }
+                                Toggle(
+                                    "Auto Increment Scene Number",
+                                    isOn: $viewModel.sceneAutoincrement
+                                )
+                                
+                                Button {
+                                    viewModel.resetCurrentSceneNumber()
+                                } label: {
+                                    Label(
+                                        "Reset Scene Count",
+                                        systemImage: "trash"
+                                    )
+                                }
                 
                 
             }

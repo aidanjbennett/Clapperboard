@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ClapperboardCore
 
 struct ExportButtonView: View {
     
@@ -17,6 +18,7 @@ struct ExportButtonView: View {
             focusedField.wrappedValue = nil
             Task {
                 await viewModel.export()
+                autoIncrementSceneNumber()
             }
         } label: {
             HStack {

@@ -19,16 +19,16 @@ public extension UserDefaults {
         // New stuff
         public static let appearanceMode = "appearanceMode"
         public static let title = "sceneTitle"
+        
+        public static let sceneAutoincrement = "sceneAutoincrement"
+        public static let currentSceneNumber = "currentSceneNumber"
 
 // TODO: Implement below
-//        public static let sceneAutoincrement = "sceneAutoincrement"
-//        public static let currentSceneNumber = "currentSceneNumber"
+
 //        
-//        public static let saveToPhotos = "saveToPhotos"
-//        public static let keepOriginalAudio = "keepOriginalAudio"
 //        public static let exportQuality = "exportQuality"
         
-        // Onboarding
+        // Onboarding / Not used anymore
         public static let hasSeenOnboarding = "hasSeenOnboarding"
     }
 }
