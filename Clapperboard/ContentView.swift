@@ -10,32 +10,40 @@ import AppTrackingTransparency
 
 struct ContentView: View {
     var body: some View {
-        TabView {
-            
-            NavigationStack {
-                HomeView()
+            TabView {
+                NavigationStack {
+                    HomeView()
+                }
+                .safeAreaInset(edge: .bottom) {
+                    CollapsibleAdBannerView(adUnitID: AdUnitID.homeBanner)
+                        .frame(height: 60)
+                        .background(.bar)
+                }
+                .tabItem {
+                    Label("Home", systemImage: "house")
+                }
+
+                NavigationStack {
+                    AddClapperboardView()
+                }
+                .safeAreaInset(edge: .bottom) {
+                    CollapsibleAdBannerView(adUnitID: AdUnitID.homeBanner)
+                        .frame(height: 60)
+                        .background(.clear)
+                }
+                .tabItem {
+                    Label("Add Clapperboard", systemImage: "video.badge.plus")
+                }
             }
-            .tabItem {
-                Label("Home", systemImage: "house")
-            }
-            
-            NavigationStack {
-                AddClapperboardView()
-            }.tabItem {
-                Label("Add Clapperboard", systemImage: "video.badge.plus")
-            }
-            
-        }.onAppear {
-            Task {
-                if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
-                    let status = await ATTrackingManager.requestTrackingAuthorization()
-                    // optionally store/log status
-                    print("Add tracking authorization: \(status)")
-                    
+            .onAppear {
+                Task {
+                    if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
+                        let status = await ATTrackingManager.requestTrackingAuthorization()
+                        print("Add tracking authorization: \(status)")
                     }
                 }
+            }
         }
-    }
 }
 
 #Preview {
