@@ -68,39 +68,6 @@ final class SettingsViewModel {
         takeAutoincrement = Foundation.UserDefaults.appGroup.bool(forKey: Foundation.UserDefaults.Keys.takeAutoincrement)
     }
     
-    func save() {
-        Foundation.UserDefaults.appGroup.set(
-            name,
-            forKey: Foundation.UserDefaults.Keys.name
-        )
-        
-        Foundation.UserDefaults.appGroup.set(
-            appearance.rawValue,
-            forKey: Foundation.UserDefaults.Keys.appearanceMode
-        )
-        
-        Foundation.UserDefaults.appGroup.set(
-            title,
-            forKey: Foundation.UserDefaults.Keys.title
-        )
-        
-        Foundation.UserDefaults.appGroup.set(
-            sceneAutoincrement,
-            forKey: Foundation.UserDefaults.Keys.sceneAutoincrement
-        )
-        
-        Foundation.UserDefaults.appGroup.set(
-            1,
-            forKey: Foundation.UserDefaults.Keys.currentSceneNumber
-        )
-        
-
-//        Foundation.UserDefaults.appGroup.set(
-//            saveToPhotos,
-//            forKey: Foundation.UserDefaults.Keys.saveToPhotos
-//        )
-    }
-    
     func sendFeedback() {
         let subject = "Clapperboard Feedback"
         let body = """
@@ -173,17 +140,6 @@ final class SettingsViewModel {
         
         // Remove old not used onboarding object
         Foundation.UserDefaults.appGroup.removeObject( forKey: Foundation.UserDefaults.Keys.hasSeenOnboarding)
-    }
-    
-    func setName(_ name: String) {
-        guard !name.isEmpty else { return }
-
-        self.name = name
-
-        Foundation.UserDefaults.appGroup.set(
-            name,
-            forKey: Foundation.UserDefaults.Keys.name
-        )
     }
 }
 
