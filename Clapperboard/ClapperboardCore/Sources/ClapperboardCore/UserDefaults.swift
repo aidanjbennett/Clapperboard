@@ -22,11 +22,9 @@ public extension UserDefaults {
         
         public static let sceneAutoincrement = "sceneAutoincrement"
         public static let currentSceneNumber = "currentSceneNumber"
-
-// TODO: Implement below
-
-//        
-//        public static let exportQuality = "exportQuality"
+        
+        public static let takeAutoincrement = "takeAutoincrement"
+        public static let currentTakeNumber = "currentTakeNumber"
         
         // Onboarding / Not used anymore
         public static let hasSeenOnboarding = "hasSeenOnboarding"

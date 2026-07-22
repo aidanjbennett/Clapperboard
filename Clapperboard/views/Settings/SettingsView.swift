@@ -36,19 +36,33 @@ struct SettingsView: View {
                     )
                 }
                 
-                                Toggle(
-                                    "Auto Increment Scene Number",
-                                    isOn: $viewModel.sceneAutoincrement
-                                )
+                Toggle(
+                    "Auto Increment Scene Number",
+                    isOn: $viewModel.sceneAutoincrement
+                )
                                 
-                                Button {
-                                    viewModel.resetCurrentSceneNumber()
-                                } label: {
-                                    Label(
-                                        "Reset Scene Count",
-                                        systemImage: "trash"
-                                    )
-                                }
+                Button {
+                    viewModel.resetCurrentSceneNumber()
+                    } label: {
+                        Label(
+                            "Reset Scene Count",
+                            systemImage: "trash"
+                        )
+                    }
+                
+                Toggle(
+                    "Auto Increment Take Number",
+                    isOn: $viewModel.takeAutoincrement
+                )
+                
+                Button {
+                    viewModel.resetCurrentTakeNumber()
+                } label: {
+                    Label(
+                        "Reset Take Count",
+                        systemImage: "trash"
+                    )
+                }
                 
                 
             }
@@ -172,13 +186,6 @@ struct SettingsView: View {
         }
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Save") {
-                    viewModel.save()
-                }
-            }
-        }
     }
 }
 

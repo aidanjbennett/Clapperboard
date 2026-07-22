@@ -18,7 +18,22 @@ struct ExportButtonView: View {
             focusedField.wrappedValue = nil
             Task {
                 await viewModel.export()
-                autoIncrementSceneNumber()
+                
+                let incrementSceneNumber: Bool = UserDefaults.appGroup.bool(
+                    forKey: UserDefaults.Keys.sceneAutoincrement
+                )
+                
+                let incrementTakeNumber: Bool = UserDefaults.appGroup.bool(
+                    forKey: UserDefaults.Keys.takeAutoincrement
+                )
+                
+                if (incrementSceneNumber == true) {
+                    autoIncrementSceneNumber()
+                }
+                
+                if (incrementTakeNumber == true) {
+                    autoIncrementTakeNumber()
+                }
             }
         } label: {
             HStack {

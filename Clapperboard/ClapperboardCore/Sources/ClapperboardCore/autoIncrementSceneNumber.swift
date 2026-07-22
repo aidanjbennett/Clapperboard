@@ -20,3 +20,17 @@ public func autoIncrementSceneNumber() {
         forKey: UserDefaults.Keys.currentSceneNumber
     )
 }
+
+public func autoIncrementTakeNumber() {
+    
+    var storedTakeNumber = UserDefaults.appGroup.integer(
+        forKey: UserDefaults.Keys.currentTakeNumber
+    )
+    
+    storedTakeNumber += 1
+    
+    UserDefaults.appGroup.set(
+        storedTakeNumber,
+        forKey: UserDefaults.Keys.currentTakeNumber
+    )
+}

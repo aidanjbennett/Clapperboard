@@ -135,7 +135,23 @@ struct ClapperboardEditingView: View {
         let output = await task.value
 
         if output != nil {
-            autoIncrementSceneNumber()
+            
+            let incrementSceneNumber: Bool = UserDefaults.appGroup.bool(
+                forKey: UserDefaults.Keys.sceneAutoincrement
+            )
+            
+            let incrementTakeNumber: Bool = UserDefaults.appGroup.bool(
+                forKey: UserDefaults.Keys.takeAutoincrement
+            )
+            
+            if (incrementSceneNumber == true) {
+                autoIncrementSceneNumber()
+            }
+            
+            if (incrementTakeNumber == true) {
+                autoIncrementTakeNumber()
+            }
+            
         }
         
         return output

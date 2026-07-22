@@ -36,14 +36,24 @@ public struct ClapperboardConfiguration : Equatable {
             forKey: UserDefaults.Keys.currentSceneNumber
         )
         
+        var storedTakeNumber = UserDefaults.appGroup.integer(
+            forKey: UserDefaults.Keys.currentTakeNumber
+        )
+        
+        if (storedTakeNumber == 0) {
+            UserDefaults.appGroup.set(1, forKey: UserDefaults.Keys.currentTakeNumber)
+            storedTakeNumber = 1
+        }
+        
         if (storedSceneNumber == 0) {
+            UserDefaults.appGroup.set(1, forKey: UserDefaults.Keys.currentSceneNumber)
             storedSceneNumber += 1
         }
         
         return ClapperboardConfiguration(
                 title: storedSceneTitle,
                 scene: "\(storedSceneNumber)",
-                take: "1",
+                take: "\(storedTakeNumber)",
                 director: storedName,
                 selectedDate: .now
         )
