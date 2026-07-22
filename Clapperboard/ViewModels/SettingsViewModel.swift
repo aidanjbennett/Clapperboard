@@ -20,21 +20,29 @@ final class SettingsViewModel {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
     }
     
-    var name: String = Foundation.UserDefaults.appGroup.string(
-        forKey: Foundation.UserDefaults.Keys.name
-    ) ?? ""
+    var name: String {
+        didSet {
+            Foundation.UserDefaults.appGroup.set(name, forKey: Foundation.UserDefaults.Keys.name)
+        }
+    }
 
-    var title: String = Foundation.UserDefaults.appGroup.string(
-        forKey: Foundation.UserDefaults.Keys.title
-    ) ?? ""
+    var title: String {
+        didSet {
+            Foundation.UserDefaults.appGroup.set(title, forKey: Foundation.UserDefaults.Keys.title)
+        }
+    }
 
-    var sceneAutoincrement: Bool = Foundation.UserDefaults.appGroup.bool(
-        forKey: Foundation.UserDefaults.Keys.sceneAutoincrement
-    )
+    var sceneAutoincrement: Bool {
+        didSet {
+            Foundation.UserDefaults.appGroup.set(sceneAutoincrement, forKey: Foundation.UserDefaults.Keys.sceneAutoincrement)
+        }
+    }
     
-    var currentSceneNumber: Int = Foundation.UserDefaults.appGroup.integer(
-        forKey: Foundation.UserDefaults.Keys.currentSceneNumber
-    )
+    var takeAutoincrement: Bool {
+        didSet {
+            Foundation.UserDefaults.appGroup.set(takeAutoincrement, forKey: Foundation.UserDefaults.Keys.takeAutoincrement)
+        }
+    }
     
     var appearance: AppearanceMode {
          didSet {
@@ -42,13 +50,22 @@ final class SettingsViewModel {
          }
      }
 
-//    var saveToPhotos: Bool = Foundation.UserDefaults.appGroup.object(
-//        forKey: Foundation.UserDefaults.Keys.saveToPhotos
-//    ) as? Bool ?? true
+    var currentSceneNumber: Int = Foundation.UserDefaults.appGroup.integer(
+        forKey: Foundation.UserDefaults.Keys.currentSceneNumber
+    )
 
+    var currentTakeNumber: Int = Foundation.UserDefaults.appGroup.integer(
+        forKey: Foundation.UserDefaults.Keys.currentTakeNumber
+    )
+    
     init() {
         let storedAppearanceMode = Foundation.UserDefaults.appGroup.string(forKey: Foundation.UserDefaults.Keys.appearanceMode) ?? AppearanceMode.system.rawValue
            appearance = AppearanceMode(rawValue: storedAppearanceMode) ?? .system
+        
+        name = Foundation.UserDefaults.appGroup.string(forKey: Foundation.UserDefaults.Keys.name) ?? ""
+        title = Foundation.UserDefaults.appGroup.string(forKey: Foundation.UserDefaults.Keys.title) ?? ""
+        sceneAutoincrement = Foundation.UserDefaults.appGroup.bool(forKey: Foundation.UserDefaults.Keys.sceneAutoincrement)
+        takeAutoincrement = Foundation.UserDefaults.appGroup.bool(forKey: Foundation.UserDefaults.Keys.takeAutoincrement)
     }
     
     func save() {
@@ -118,6 +135,16 @@ final class SettingsViewModel {
             forKey: Foundation.UserDefaults.Keys.currentSceneNumber
         )
     }
+    
+    
+    func resetCurrentTakeNumber() {
+        currentTakeNumber = 1
+      
+        Foundation.UserDefaults.appGroup.set(
+            currentTakeNumber,
+            forKey: Foundation.UserDefaults.Keys.currentTakeNumber
+        )
+    }
 
     func resetValues() {
         name = ""
@@ -125,6 +152,9 @@ final class SettingsViewModel {
         
         sceneAutoincrement = false
         currentSceneNumber = 1
+        
+        takeAutoincrement = false
+        currentTakeNumber = 1
         // saveToPhotos = true
         
         appearance = .system
@@ -144,7 +174,7 @@ final class SettingsViewModel {
         // Remove old not used onboarding object
         Foundation.UserDefaults.appGroup.removeObject( forKey: Foundation.UserDefaults.Keys.hasSeenOnboarding)
     }
-
+    
     func setName(_ name: String) {
         guard !name.isEmpty else { return }
 
