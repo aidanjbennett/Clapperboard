@@ -8,6 +8,7 @@
 import Foundation
 import ClapperboardCore
 import UIKit
+import PostHog
 
 @Observable
 final class SettingsViewModel {
@@ -44,6 +45,12 @@ final class SettingsViewModel {
         }
     }
     
+    var saveToPhotos: Bool {
+        didSet {
+            Foundation.UserDefaults.appGroup.set(takeAutoincrement, forKey: Foundation.UserDefaults.Keys.saveToPhotos)
+        }
+    }
+    
     var appearance: AppearanceMode {
          didSet {
              Foundation.UserDefaults.appGroup.set(appearance.rawValue, forKey: Foundation.UserDefaults.Keys.appearanceMode)
@@ -66,6 +73,8 @@ final class SettingsViewModel {
         title = Foundation.UserDefaults.appGroup.string(forKey: Foundation.UserDefaults.Keys.title) ?? ""
         sceneAutoincrement = Foundation.UserDefaults.appGroup.bool(forKey: Foundation.UserDefaults.Keys.sceneAutoincrement)
         takeAutoincrement = Foundation.UserDefaults.appGroup.bool(forKey: Foundation.UserDefaults.Keys.takeAutoincrement)
+        
+        saveToPhotos = Foundation.UserDefaults.appGroup.bool(forKey: Foundation.UserDefaults.Keys.saveToPhotos)
     }
     
     func sendFeedback() {
@@ -92,25 +101,28 @@ final class SettingsViewModel {
         guard let url = components.url else { return }
 
         UIApplication.shared.open(url)
+        PostHogSDK.shared.capture("feedback_sent")
     }
     
     func resetCurrentSceneNumber() {
         currentSceneNumber = 1
-      
+
         Foundation.UserDefaults.appGroup.set(
             currentSceneNumber,
             forKey: Foundation.UserDefaults.Keys.currentSceneNumber
         )
+        PostHogSDK.shared.capture("scene_count_reset")
     }
     
     
     func resetCurrentTakeNumber() {
         currentTakeNumber = 1
-      
+
         Foundation.UserDefaults.appGroup.set(
             currentTakeNumber,
             forKey: Foundation.UserDefaults.Keys.currentTakeNumber
         )
+        PostHogSDK.shared.capture("take_count_reset")
     }
 
     func resetValues() {
@@ -118,9 +130,9 @@ final class SettingsViewModel {
         title = ""
         
         sceneAutoincrement = false
-        currentSceneNumber = 1
-        
         takeAutoincrement = false
+
+        currentSceneNumber = 1
         currentTakeNumber = 1
         // saveToPhotos = true
         
@@ -129,17 +141,18 @@ final class SettingsViewModel {
         Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.appearanceMode)
 
         Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.name)
-        
+
         Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.title)
 
         Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.sceneAutoincrement)
-        
+
         Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.currentSceneNumber)
-        
+
         // Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.saveToPhotos)
-        
+
         // Remove old not used onboarding object
         Foundation.UserDefaults.appGroup.removeObject( forKey: Foundation.UserDefaults.Keys.hasSeenOnboarding)
+        PostHogSDK.shared.capture("settings_reset")
     }
 }
 

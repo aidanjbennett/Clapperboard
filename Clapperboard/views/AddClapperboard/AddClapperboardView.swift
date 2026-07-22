@@ -8,6 +8,7 @@
 import SwiftUI
 import ClapperboardCore
 import PhotosUI
+import PostHog
 
 struct AddClapperboardView: View {
 
@@ -106,6 +107,9 @@ struct AddClapperboardView: View {
                         Label("Share Video", systemImage: "square.and.arrow.up")
                             .frame(maxWidth: .infinity)
                     }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        PostHogSDK.shared.capture("video_shared")
+                    })
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
                     .padding(.horizontal)

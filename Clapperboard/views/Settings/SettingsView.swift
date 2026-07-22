@@ -10,12 +10,12 @@ import SwiftUI
 struct SettingsView: View {
 
     @State private var viewModel = SettingsViewModel()
-
+    @State private var showResetSettingsConfirmation = false
+    
     var body: some View {
         Form {
             
-            Section("Clapperboard Defaults") {
-                
+            Section {
                 HStack {
                     Image(systemName: "person.crop.circle")
                         .foregroundStyle(.secondary)
@@ -35,13 +35,18 @@ struct SettingsView: View {
                         text: $viewModel.title
                     )
                 }
-                
+            } header: {
+                Text("Slate Details")
+            }
+            
+            
+            Section {
                 Toggle(
                     "Auto Increment Scene Number",
                     isOn: $viewModel.sceneAutoincrement
                 )
                                 
-                Button {
+                Button(role: .destructive) {
                     viewModel.resetCurrentSceneNumber()
                     } label: {
                         Label(
@@ -49,13 +54,19 @@ struct SettingsView: View {
                             systemImage: "trash"
                         )
                     }
-                
+            } header: {
+                Text("Scene Number")
+            } footer: {
+                Text("Automatically increases by one after each export.")
+            }
+            
+            Section {
                 Toggle(
                     "Auto Increment Take Number",
                     isOn: $viewModel.takeAutoincrement
                 )
                 
-                Button {
+                Button(role: .destructive) {
                     viewModel.resetCurrentTakeNumber()
                 } label: {
                     Label(
@@ -63,21 +74,22 @@ struct SettingsView: View {
                         systemImage: "trash"
                     )
                 }
-                
-                
+            } header: {
+                Text("Take Number")
+            } footer: {
+                Text("Automatically increases by one after each export.")
             }
             
             
-//            Section("Export") {
-//                
-//                Toggle(
-//                    "Save to Photos",
-//                    isOn: $viewModel.saveToPhotos
-//                )
-//                
-//            }
-            Section("Appearance") {
-
+            Section("Export") {
+                
+                Toggle(
+                    "Save to Photos",
+                    isOn: $viewModel.saveToPhotos
+                )
+                
+            }
+            Section {
                 Picker(
                     "Theme",
                     selection: $viewModel.appearance
@@ -87,9 +99,10 @@ struct SettingsView: View {
                             .tag(mode)
                     }
                 }
+            } header: {
+                Text("Appearance")
             }
-
-
+            // TODO: Implement
 //            Section("Premium") {
 //
 //                Button {
@@ -113,9 +126,7 @@ struct SettingsView: View {
 //                }
 //            }
 
-
-            Section("Support") {
-
+            Section {
                 Link(
                     destination: URL(string: "https://apps.apple.com/app/id6759068299?action=write-review")!
                 ) {
@@ -133,20 +144,12 @@ struct SettingsView: View {
                         systemImage: "envelope"
                     )
                 }
-
-//                Button {
-//                    // Feature request
-//                } label: {
-//                    Label(
-//                        "Request Feature",
-//                        systemImage: "lightbulb"
-//                    )
-//                }
+            } header: {
+                Text("Support")
             }
 
 
-            Section("About") {
-
+            Section {
                 LabeledContent(
                     "Version",
                     value: "\(viewModel.appVersion) (\(viewModel.buildNumber))"
@@ -169,6 +172,8 @@ struct SettingsView: View {
                         systemImage: "doc.text"
                     )
                 }
+            } header: {
+                Text("About")
             }
 
 
@@ -181,6 +186,15 @@ struct SettingsView: View {
                         "Reset Settings",
                         systemImage: "trash"
                     )
+                }.confirmationDialog(
+                    "Reset all settings to their defaults?",
+                    isPresented: $showResetSettingsConfirmation,
+                    titleVisibility: .visible
+                ) {
+                    Button("Reset", role: .destructive) {
+                        viewModel.resetValues()
+                    }
+                    Button("Cancel", role: .cancel) {}
                 }
             }
         }

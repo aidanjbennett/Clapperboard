@@ -26,6 +26,9 @@ public extension UserDefaults {
         public static let takeAutoincrement = "takeAutoincrement"
         public static let currentTakeNumber = "currentTakeNumber"
         
+        // TODO: Implement save To Photos
+        public static let saveToPhotos = "saveToPhotos"
+        
         // Onboarding / Not used anymore
         public static let hasSeenOnboarding = "hasSeenOnboarding"
     }

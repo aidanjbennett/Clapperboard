@@ -9,6 +9,7 @@ import SwiftUI
 import ClapperboardCore
 import PhotosUI
 import AVFoundation
+import PostHog
 
 @MainActor
 @Observable
@@ -65,6 +66,7 @@ class AddClapperboardViewModel {
             }
 
             selectedVideoURL = movie.url
+            PostHogSDK.shared.capture("video_selected")
         } catch {
             self.error = error
         }
@@ -101,8 +103,12 @@ class AddClapperboardViewModel {
             )
 
             exportedVideoURL = outputURL
+            PostHogSDK.shared.capture("video_exported")
 
         } catch {
+            PostHogSDK.shared.capture("export_failed", properties: [
+                "error_message": error.localizedDescription,
+            ])
             self.error = error
         }
     }
@@ -125,6 +131,7 @@ class AddClapperboardViewModel {
         previewImage = nil
         exportedVideoURL = nil
         error = nil
+        PostHogSDK.shared.capture("video_changed")
     }
     
     func refreshDefaultsIfNeeded() {

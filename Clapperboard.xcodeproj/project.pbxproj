@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD00FFAB3000000100000001 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = DD00FFAB3000000300000001 /* PostHog */; };
+		DD00FFAB3000000200000001 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = DD00FFAB3000000400000001 /* PostHog */; };
 		DD2356B630068C5200CED66E /* ClapperboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = DD2356B530068C5200CED66E /* ClapperboardCore */; };
 		DD2356B830068C5A00CED66E /* ClapperboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = DD2356B730068C5A00CED66E /* ClapperboardCore */; };
 		DD24D4042FCAE5C800BA4FEE /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = DD24D4032FCAE5C800BA4FEE /* Sentry */; };
@@ -103,6 +105,7 @@
 				DDD1ACDB2FED85C2007F7304 /* GoogleMobileAds in Frameworks */,
 				DDDCC34D2FB49A9B00FB5167 /* (null) in Frameworks */,
 				DD24D4062FCAE5DD00BA4FEE /* Sentry in Frameworks */,
+				DD00FFAB3000000100000001 /* PostHog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +117,7 @@
 				DDEFADB72E848AE0003E520D /* PhotosUI.framework in Frameworks */,
 				DDEFADB82E848AE0003E520D /* Photos.framework in Frameworks */,
 				DD24D4042FCAE5C800BA4FEE /* Sentry in Frameworks */,
+				DD00FFAB3000000200000001 /* PostHog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,6 +181,7 @@
 				DD24D4052FCAE5DD00BA4FEE /* Sentry */,
 				DDD1ACDA2FED85C2007F7304 /* GoogleMobileAds */,
 				DD2356B530068C5200CED66E /* ClapperboardCore */,
+				DD00FFAB3000000300000001 /* PostHog */,
 			);
 			productName = Clapperboard;
 			productReference = DDA0549B2E9F9923005CE771 /* Clapperboard.app */;
@@ -201,6 +206,7 @@
 			packageProductDependencies = (
 				DD24D4032FCAE5C800BA4FEE /* Sentry */,
 				DD2356B730068C5A00CED66E /* ClapperboardCore */,
+				DD00FFAB3000000400000001 /* PostHog */,
 			);
 			productName = ClapperEdit;
 			productReference = DDEFADB62E848AE0003E520D /* PhotoExtension.appex */;
@@ -237,6 +243,7 @@
 				DD24D4022FCAE5C800BA4FEE /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				DDD1ACD92FED85C2007F7304 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 				DD2356B230068C2A00CED66E /* XCLocalSwiftPackageReference "ClapperboardCore" */,
+				DD00FFAB3000000500000001 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DD189B992E8465FB006FA7EE /* Products */;
@@ -594,7 +601,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -634,7 +641,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -678,6 +685,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		DD00FFAB3000000500000001 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PostHog/posthog-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.67.0;
+			};
+		};
 		DD24D4022FCAE5C800BA4FEE /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
@@ -699,6 +714,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DD00FFAB3000000300000001 /* PostHog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD00FFAB3000000500000001 /* XCRemoteSwiftPackageReference "posthog-ios" */;
+			productName = PostHog;
+		};
+		DD00FFAB3000000400000001 /* PostHog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD00FFAB3000000500000001 /* XCRemoteSwiftPackageReference "posthog-ios" */;
+			productName = PostHog;
+		};
 		DD2356B530068C5200CED66E /* ClapperboardCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ClapperboardCore;

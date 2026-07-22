@@ -10,6 +10,7 @@ import AVFoundation
 import UIKit
 import Sentry
 import ClapperboardCore
+import PostHog
 
 /// Orchestrates the Photos editing lifecycle and delegates all heavy work to
 /// `ClapperboardRenderer` and `VideoCompositor`.
@@ -25,6 +26,13 @@ class ClapperboardViewModel {
     @MainActor
     init() {
         self.configuration = .default
+
+        let posthogConfig = PostHogConfig(
+            projectToken: "phc_oh8fPqMsoXbVg6Bxwu2f3CeZbtAKznm4AFteUppFfYDS",
+            host: "https://eu.i.posthog.com"
+        )
+        posthogConfig.appGroupIdentifier = "group.com.aidanjbennett.clapperboard"
+        PostHogSDK.shared.setup(posthogConfig)
     }
 
     // Formatted date string for rendering on the clapperboard
@@ -79,10 +87,14 @@ class ClapperboardViewModel {
             try await processVideo(inputURL: videoURL, outputURL: output.renderedContentURL)
             try verifyOutput(at: output.renderedContentURL)
 
+            PostHogSDK.shared.capture("extension_export_completed")
             await MainActor.run { isProcessing = false }
             return output
         } catch {
             SentrySDK.capture(error: error)
+            PostHogSDK.shared.capture("extension_export_failed", properties: [
+                "error_message": error.localizedDescription,
+            ])
             print("Export error: \(error) — \(error.localizedDescription)")
             await MainActor.run { isProcessing = false }
             return nil
