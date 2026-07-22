@@ -17,14 +17,19 @@ class AddClapperboardViewModel {
 
     var selectedItem: PhotosPickerItem?
     var selectedVideoURL: URL?
-
+    
     var configuration: ClapperboardConfiguration = .default
+    
+    var isSaveToPhotosEnabled: Bool {
+        Foundation.UserDefaults.appGroup.object(
+            forKey: Foundation.UserDefaults.Keys.saveToPhotos
+        ) as? Bool ?? true
+    }
     
     private var lastAppliedDefaultTitle: String
     private var lastAppliedDefaultDirector: String
     private var lastAppliedCurrentSceneNumber: String
     private var lastAppliedCurrentTakeNumber: String
-
     
     init() {
         let defaults = ClapperboardConfiguration.default
@@ -101,15 +106,44 @@ class AddClapperboardViewModel {
                 outputURL: outputURL,
                 overlayImage: overlay
             )
-
+            
             exportedVideoURL = outputURL
             PostHogSDK.shared.capture("video_exported")
+            
+            let isSaveToPhotosEnabled = Foundation.UserDefaults.appGroup.object(
+                      forKey: Foundation.UserDefaults.Keys.saveToPhotos
+                  ) as? Bool ?? true
+
+            if isSaveToPhotosEnabled {
+                await saveToPhotoLibrary(outputURL)
+            }
 
         } catch {
             PostHogSDK.shared.capture("export_failed", properties: [
                 "error_message": error.localizedDescription,
             ])
             self.error = error
+        }
+    }
+    
+    private func saveToPhotoLibrary(_ url: URL) async {
+        let status = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
+
+        guard status == .authorized || status == .limited else {
+            PostHogSDK.shared.capture("save_to_photos_denied")
+            return
+        }
+
+        do {
+            try await PHPhotoLibrary.shared().performChanges {
+                PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
+            }
+            PostHogSDK.shared.capture("saved_to_photos")
+        } catch {
+            PostHogSDK.shared.capture("save_to_photos_failed", properties: [
+                "error_message": error.localizedDescription,
+            ])
+            // Deliberately not setting self.error here — see note below.
         }
     }
 

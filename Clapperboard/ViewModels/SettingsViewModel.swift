@@ -131,6 +131,7 @@ final class SettingsViewModel {
         
         sceneAutoincrement = false
         takeAutoincrement = false
+        saveToPhotos = false
 
         currentSceneNumber = 1
         currentTakeNumber = 1
@@ -148,7 +149,7 @@ final class SettingsViewModel {
 
         Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.currentSceneNumber)
 
-        // Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.saveToPhotos)
+        Foundation.UserDefaults.appGroup.removeObject(forKey: Foundation.UserDefaults.Keys.saveToPhotos)
 
         // Remove old not used onboarding object
         Foundation.UserDefaults.appGroup.removeObject( forKey: Foundation.UserDefaults.Keys.hasSeenOnboarding)
