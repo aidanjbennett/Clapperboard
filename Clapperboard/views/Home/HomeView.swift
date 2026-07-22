@@ -11,7 +11,9 @@ import GoogleMobileAds
 
 struct HomeView: View {
     
-    @State private var viewModel = SettingsViewModel()
+    @State private var viewModel = HomeViewModel()
+    @State private var showResetConfirmation = false
+
     @FocusState private var nameIsFocused: Bool
 
     var body: some View {
@@ -30,7 +32,8 @@ struct HomeView: View {
                     .padding(.vertical, 4)
                 }
                 
-                Section(header: Text("Quick settings")) {
+                Section(header: Text("Quick settings"),
+                        footer: Text("This name appears on every clapperboard slate you create.")) {
                     HStack {
                         Image(systemName: "person.crop.circle")
                             .foregroundStyle(.secondary)
@@ -41,38 +44,58 @@ struct HomeView: View {
                 
                 Section {
                     Button(role: .destructive) {
-                        viewModel.resetValues()
+                        showResetConfirmation = true
                     } label: {
                         Text("Reset to Defaults")
+                    }
+                    .confirmationDialog(
+                        "Reset your default name?",
+                        isPresented: $showResetConfirmation,
+                        titleVisibility: .visible
+                    ) {
+                        Button("Reset", role: .destructive) {
+                            viewModel.resetQuickSettings()
+                        }
+                        Button("Cancel", role: .cancel) {}
                     }
                 }
                 
                 Section {
-                    Text("Go to Add Clapperboard and select a video and fill in your details and click export. Or use our photo extention by selecting videos in your library, then open Clapperboard Pro to perform quick actions.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .padding(.vertical, 4)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Label("Create from a video in the app", systemImage: "video.badge.plus")
+                        Label("Or use the Photo Extension from your library", systemImage: "photo.on.rectangle.angled")
+                    }
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
                 }
-                CollapsibleAdBannerView(
-                    adUnitID: AdUnitID.homeBanner
-                )
-                .frame(height: 60)
+                
+                Section {
+                    CollapsibleAdBannerView(
+                        adUnitID: AdUnitID.homeBanner
+                    )
+                    .frame(height: 60)
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                }
                 
             }
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Save") {
-                        nameIsFocused = false
-                        viewModel.save()
-                    }
-                }
                 
-                ToolbarItem(placement: .secondaryAction) {
+                ToolbarItem(placement: .keyboard) {
+                      Spacer()
+                  }
+                
+                ToolbarItem(placement: .keyboard) {
+                      Button("Done") {
+                          nameIsFocused = false
+                      }
+                  }
+              
+                ToolbarItem(placement: .primaryAction) {
                     NavigationLink {
                         SettingsView()
                     } label: {
-                        Text("More Settings")
-                        Image(systemName: "gearshape")
+                        Label("Settings", systemImage: "gearshape")
                     }
                     .accessibilityLabel("More Settings")
                 }
