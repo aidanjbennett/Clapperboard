@@ -17,12 +17,15 @@ final class HomeViewModel {
         }
     }
     
-    init() {
-        name = Foundation.UserDefaults.appGroup.string(forKey: Foundation.UserDefaults.Keys.name) ?? ""
+    var title: String {
+        didSet {
+            Foundation.UserDefaults.appGroup.set(title, forKey: Foundation.UserDefaults.Keys.title)
+        }
     }
     
-    func resetQuickSettings() {
-        name = ""
-    }
+    init() {
+        name  = Foundation.UserDefaults.appGroup.string(forKey: Foundation.UserDefaults.Keys.name) ?? ""
+        title = Foundation.UserDefaults.appGroup.string(forKey: Foundation.UserDefaults.Keys.title) ?? ""
 
+    }
 }

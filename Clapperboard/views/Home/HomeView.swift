@@ -12,9 +12,6 @@ import GoogleMobileAds
 struct HomeView: View {
     
     @State private var viewModel = HomeViewModel()
-    @State private var showResetConfirmation = false
-
-    @FocusState private var nameIsFocused: Bool
 
     var body: some View {
             Form {
@@ -32,35 +29,7 @@ struct HomeView: View {
                     .padding(.vertical, 4)
                 }
                 
-                Section(header: Text("Quick settings"),
-                        footer: Text("This name appears on every clapperboard slate you create.")) {
-                    HStack {
-                        Image(systemName: "person.crop.circle")
-                            .foregroundStyle(.secondary)
-                        TextField("Default name", text: $viewModel.name)
-                            .focused($nameIsFocused)
-                    }
-                }
-                
-                Section {
-                    Button(role: .destructive) {
-                        showResetConfirmation = true
-                    } label: {
-                        Text("Reset to Defaults")
-                    }
-                    .confirmationDialog(
-                        "Reset your default name?",
-                        isPresented: $showResetConfirmation,
-                        titleVisibility: .visible
-                    ) {
-                        Button("Reset", role: .destructive) {
-                            viewModel.resetQuickSettings()
-                        }
-                        Button("Cancel", role: .cancel) {}
-                    }
-                }
-                
-                Section {
+                Section(header: Text("How to use")) {
                     VStack(alignment: .leading, spacing: 8) {
                         Label("Create from a video in the app", systemImage: "video.badge.plus")
                         Label("Or use the Photo Extension from your library", systemImage: "photo.on.rectangle.angled")
@@ -69,28 +38,15 @@ struct HomeView: View {
                     .foregroundStyle(.secondary)
                 }
                 
-                Section {
-                    CollapsibleAdBannerView(
-                        adUnitID: AdUnitID.homeBanner
-                    )
-                    .frame(height: 60)
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
+                Section(header: Text("Clapperboard Preview")){
+                    SlatePreviewView(name: viewModel.name, title: viewModel.title)
                 }
+//                .listRowInsets(EdgeInsets())
+//                .listRowBackground(Color.clear)
                 
             }
             .toolbar {
                 
-                ToolbarItem(placement: .keyboard) {
-                      Spacer()
-                  }
-                
-                ToolbarItem(placement: .keyboard) {
-                      Button("Done") {
-                          nameIsFocused = false
-                      }
-                  }
-              
                 ToolbarItem(placement: .primaryAction) {
                     NavigationLink {
                         SettingsView()
